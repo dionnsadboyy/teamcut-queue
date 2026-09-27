@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090909">
+  <meta name="description" content="Panel operasional TEAMCUT untuk cabang dan antrean.">
+  <title>TEAMCUT. — ADMIN</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <script src="../js/admin.js" defer></script>
+</head>
+<body class="admin-page is-locked">
+  <main class="admin-app">
+    <section class="admin-screen dashboard-screen" id="dashboard-screen" aria-labelledby="dashboard-title">
+      <div class="dashboard-shell">
+        <header class="dashboard-header">
+          <a class="brand-lockup" href="../index.html" aria-label="TEAMCUT">
+            <svg class="brand-logo" viewBox="40 370 960 560" role="img" aria-label="TEAMCUT">
+              <defs>
+                <filter id="admin-logo-white-home" color-interpolation-filters="sRGB">
+                  <feColorMatrix type="matrix" values="
+                    0 0 0 0 1
+                    0 0 0 0 1
+                    0 0 0 0 1
+                    -0.333333 -0.333333 -0.333333 1 0
+                  "/>
+                </filter>
+              </defs>
+              <image href="../assets/images/teamcut-logo.png" x="0" y="0" width="1080" height="1350" filter="url(#admin-logo-white-home)"/>
+            </svg>
+            <span class="brand-period" aria-hidden="true">.</span>
+          </a>
+          <div class="dashboard-account">
+            <span class="account-email" id="account-email">ADMIN</span>
+            <button class="logout-button" id="logout-button" type="button">KELUAR</button>
+          </div>
+        </header>
+
+        <div class="demo-banner">MODE DEMO <span>·</span> PERUBAHAN BERSIFAT LOKAL</div>
+
+        <h1 class="visually-hidden" id="dashboard-title" tabindex="-1">Kelola status cabang dan antrean TEAMCUT</h1>
+
+        <section class="branch-control" aria-labelledby="branch-select-label">
+          <label class="field-caption" id="branch-select-label" for="branch-select">PILIH CABANG</label>
+          <div class="select-wrap">
+            <select id="branch-select" name="branch">
+              <option value="cikedokan">Cikedokan</option>
+              <option value="jati-wangi">Jati Wangi</option>
+              <option value="jarakosta">Jarakosta</option>
+            </select>
+            <span class="select-arrow" aria-hidden="true">⌄</span>
+          </div>
+        </section>
+
+        <section class="branch-operations" aria-live="polite">
+          <div class="branch-heading">
+            <div>
+              <p class="field-caption">STATUS CABANG</p>
+              <h2 id="active-branch-name">CIKEDOKAN<span class="accent-period">.</span></h2>
+            </div>
+            <button class="status-toggle is-open" id="status-toggle" type="button" aria-pressed="true">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span id="status-label">BUKA</span>
+            </button>
+          </div>
+
+          <div class="queue-panel">
+            <p class="field-caption queue-caption">ANTRIAN SAAT INI</p>
+            <div class="queue-number-line">
+              <strong id="queue-number" aria-live="polite">06</strong>
+              <span>ORANG</span>
+            </div>
+            <div class="queue-controls" role="group" aria-label="Ubah jumlah antrean">
+              <button class="queue-button queue-minus" id="queue-minus" type="button" aria-label="Kurangi antrean satu orang">−</button>
+              <button class="queue-button queue-plus" id="queue-plus" type="button" aria-label="Tambah antrean satu orang">+</button>
+            </div>
+            <div class="updated-line">
+              <span class="updated-label">TERAKHIR DIPERBARUI</span>
+              <time id="updated-at"></time>
+            </div>
+          </div>
+        </section>
+
+        <footer class="dashboard-footer">
+          <span>TEAMCUT<span class="footer-period">.</span></span>
+          <span>YOUR STYLE / YOUR INDENTITY</span>
+        </footer>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090909">
+  <meta name="description" content="Masuk ke panel operasional TEAMCUT.">
+  <title>TEAMCUT. — MASUK ADMIN</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <script src="../js/admin.js" defer></script>
+</head>
+<body class="admin-page">
+  <main class="admin-app">
+    <section class="admin-screen login-screen" id="login-screen" aria-labelledby="login-title">
+      <div class="login-backdrop" aria-hidden="true"></div>
+      <div class="login-content">
+        <header class="login-header">
+          <a class="brand-lockup" href="../index.html" aria-label="TEAMCUT">
+            <svg class="brand-logo" viewBox="40 370 960 560" role="img" aria-label="TEAMCUT">
+              <defs>
+                <filter id="admin-logo-white" color-interpolation-filters="sRGB">
+                  <feColorMatrix type="matrix" values="
+                    0 0 0 0 1
+                    0 0 0 0 1
+                    0 0 0 0 1
+                    -0.333333 -0.333333 -0.333333 1 0
+                  "/>
+                </filter>
+              </defs>
+              <image href="../assets/images/teamcut-logo.png" x="0" y="0" width="1080" height="1350" filter="url(#admin-logo-white)"/>
+            </svg>
+            <span class="brand-period" aria-hidden="true">.</span>
+          </a>
+          <span class="admin-tag">ADMIN</span>
+        </header>
+
+        <div class="login-intro">
+          <p class="eyebrow">PANEL OPERASIONAL</p>
+          <h1 id="login-title">MASUK<br>KE ADMIN<span class="accent-period">.</span></h1>
+          <p class="login-description">Kelola status dan antrean cabang TEAMCUT.</p>
+        </div>
+
+        <form class="login-form" id="login-form" novalidate>
+          <label class="form-field" for="admin-email">
+            <span>EMAIL</span>
+            <input id="admin-email" name="email" type="email" autocomplete="off" placeholder="Email admin" required>
+          </label>
+          <label class="form-field" for="admin-password">
+            <span>PASSWORD</span>
+            <input id="admin-password" name="password" type="password" autocomplete="off" placeholder="Password" required>
+          </label>
+          <p class="login-error" id="login-error" role="alert" hidden></p>
+          <button class="login-submit" type="submit">MASUK <span aria-hidden="true">→</span></button>
+          <p class="demo-note">MODE DEMO · DATA TIDAK DISIMPAN KE DATABASE</p>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
