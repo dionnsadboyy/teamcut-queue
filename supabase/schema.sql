@@ -18,6 +18,8 @@ create table public.hairstylist (
   nama text not null,
   foto text,
   bio text,
+  instagram text,
+  keunggulan text,
   nomor_whatsapp text,
   status boolean not null default true,
   created_at timestamptz not null default now()

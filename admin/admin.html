@@ -7,7 +7,8 @@
   <meta name="description" content="Panel operasional TEAMCUT untuk cabang dan antrean.">
   <title>TEAMCUT. — ADMIN</title>
   <link rel="stylesheet" href="../css/admin.css">
-  <script src="../js/admin.js" defer></script>
+  <script type="module" src="../js/supabase.js"></script>
+  <script type="module" src="../js/admin.js"></script>
 </head>
 <body class="admin-page is-locked">
   <main class="admin-app">
@@ -36,18 +37,15 @@
           </div>
         </header>
 
-        <div class="demo-banner">MODE DEMO <span>·</span> PERUBAHAN BERSIFAT LOKAL</div>
+        <div class="demo-banner">DATABASE SUPABASE <span>·</span> DATA LANGSUNG</div>
+        <p class="login-error" id="admin-data-error" role="alert" hidden></p>
 
         <h1 class="visually-hidden" id="dashboard-title" tabindex="-1">Kelola status cabang dan antrean TEAMCUT</h1>
 
         <section class="branch-control" aria-labelledby="branch-select-label">
           <label class="field-caption" id="branch-select-label" for="branch-select">PILIH CABANG</label>
           <div class="select-wrap">
-            <select id="branch-select" name="branch">
-              <option value="cikedokan">Cikedokan</option>
-              <option value="jati-wangi">Jati Wangi</option>
-              <option value="jarakosta">Jarakosta</option>
-            </select>
+            <select id="branch-select" name="branch" disabled></select>
             <span class="select-arrow" aria-hidden="true">⌄</span>
           </div>
         </section>
@@ -56,23 +54,23 @@
           <div class="branch-heading">
             <div>
               <p class="field-caption">STATUS CABANG</p>
-              <h2 id="active-branch-name">CIKEDOKAN<span class="accent-period">.</span></h2>
+              <h2 id="active-branch-name">CABANG<span class="accent-period">.</span></h2>
             </div>
-            <button class="status-toggle is-open" id="status-toggle" type="button" aria-pressed="true">
+            <button class="status-toggle" id="status-toggle" type="button" aria-pressed="false" disabled>
               <span class="status-dot" aria-hidden="true"></span>
-              <span id="status-label">BUKA</span>
+              <span id="status-label">—</span>
             </button>
           </div>
 
           <div class="queue-panel">
             <p class="field-caption queue-caption">ANTRIAN SAAT INI</p>
             <div class="queue-number-line">
-              <strong id="queue-number" aria-live="polite">06</strong>
+              <strong id="queue-number" aria-live="polite">—</strong>
               <span>ORANG</span>
             </div>
             <div class="queue-controls" role="group" aria-label="Ubah jumlah antrean">
-              <button class="queue-button queue-minus" id="queue-minus" type="button" aria-label="Kurangi antrean satu orang">−</button>
-              <button class="queue-button queue-plus" id="queue-plus" type="button" aria-label="Tambah antrean satu orang">+</button>
+              <button class="queue-button queue-minus" id="queue-minus" type="button" aria-label="Kurangi antrean satu orang" disabled>−</button>
+              <button class="queue-button queue-plus" id="queue-plus" type="button" aria-label="Tambah antrean satu orang" disabled>+</button>
             </div>
             <div class="updated-line">
               <span class="updated-label">TERAKHIR DIPERBARUI</span>

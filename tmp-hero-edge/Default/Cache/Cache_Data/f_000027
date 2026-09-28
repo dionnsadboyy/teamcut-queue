@@ -1,0 +1,2031 @@
+﻿:root {
+  color-scheme: light;
+  --color-black: #111111;
+  --color-white: #ffffff;
+  --color-gray-100: #f3f3f1;
+  --color-gray-300: #d1d1ce;
+  --color-gray-600: #686865;
+  --color-accent: #ed1235;
+  --color-open: #34b66a;
+  --font-body: Arial, Helvetica, sans-serif;
+  --content-width: 1120px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: var(--color-white);
+  color: var(--color-black);
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+main {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+a {
+  color: inherit;
+}
+.site-header,
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+}
+.site-header {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.5rem 1.5rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-white);
+}
+.wordmark {
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  text-decoration: none;
+}
+.wordmark span {
+  color: var(--color-accent);
+}
+.site-header .wordmark {
+  display: block;
+  width: 4.5rem;
+  height: 4.5rem;
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+.site-header .teamcut-wordmark {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.menu-toggle {
+  position: relative;
+  z-index: 6;
+  display: grid;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  align-content: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.15rem;
+  border: 0;
+  background: rgb(0 0 0 / 28%);
+  cursor: pointer;
+}
+.menu-toggle span {
+  display: block;
+  justify-self: center;
+  width: 1.5rem;
+  height: 1.5px;
+  background: var(--color-white);
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+.menu-toggle:focus-visible {
+  outline: 1px solid var(--color-white);
+  outline-offset: 3px;
+}
+.menu-toggle[aria-expanded="true"] span:first-child {
+  transform: translateY(6px) rotate(45deg);
+}
+.menu-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle[aria-expanded="true"] span:last-child {
+  transform: translateY(-6px) rotate(-45deg);
+}
+.site-nav {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 0.4rem);
+  right: 1.5rem;
+  display: grid;
+  width: min(19rem, calc(100% - 3rem));
+  padding: 0.4rem 1rem;
+  border: 1px solid #414141;
+  background: #090909;
+}
+.site-nav[hidden] {
+  display: none;
+}
+.site-nav a {
+  padding: 0.9rem 0;
+  border-bottom: 1px solid #343434;
+  color: var(--color-white);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+}
+.site-nav a:last-child {
+  border-bottom: 0;
+}
+.site-nav a:hover,
+.site-nav a:focus-visible {
+  color: #c4c4c4;
+}
+.section {
+  padding: 4rem 1.5rem;
+}
+.hero {
+  --hero-stage-shift: 2.75rem;
+  position: relative;
+  display: flex;
+  width: 100%;
+  max-width: none;
+  min-height: calc(max(100svh, 48rem) + var(--hero-stage-shift));
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  margin: 0;
+  padding: 0 1.5rem 2rem;
+  background: var(--color-black);
+  color: var(--color-white);
+}
+main > section {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+.hero-image {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 48%;
+}
+.hero-foreground {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 48%;
+  pointer-events: none;
+}
+.hero-content {
+  position: relative;
+  padding-top: clamp(6.5rem, 14vh, 10rem);
+}
+.hero h1 {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  transform: translateY(-1.5rem);
+  font-size: clamp(4.4rem, 20.5vw, 11rem);
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-weight: 900;
+  line-height: 0.77;
+  letter-spacing: 0.035em;
+  white-space: nowrap;
+}
+.hero h1 span {
+  color: var(--color-accent);
+}
+.hero-tagline {
+  position: relative;
+  z-index: 4;
+  margin: 1.25rem 0 0 0.1rem;
+  color: rgb(255 255 255 / 78%);
+  font-size: 0.72rem;
+  letter-spacing: 0.19em;
+  line-height: 1.9;
+}
+.hero-signature {
+  position: relative;
+  z-index: 4;
+  display: block;
+  width: 2.5rem;
+  height: 1px;
+  margin: 0.9rem 0 0 0.1rem;
+  background: rgb(255 255 255 / 75%);
+}
+.hero-bottom {
+  position: relative;
+  z-index: 5;
+}
+.queue-strip {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+}
+.hero-branch-tabs {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  gap: 0.35rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  border-bottom: 1px solid rgb(255 255 255 / 35%);
+  scrollbar-width: none;
+}
+.hero-branch-tabs::-webkit-scrollbar {
+  display: none;
+}
+.hero-branch-tab {
+  flex: 0 0 auto;
+  min-width: 0;
+  padding: 0.45rem 0.45rem 0.62rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: transparent;
+  color: rgb(255 255 255 / 68%);
+  font: inherit;
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.hero-branch-tab[aria-selected="true"] {
+  border-bottom-color: var(--color-accent);
+  color: var(--color-white);
+}
+.hero-branch-data {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  align-items: center;
+  gap: 0.5rem 0.8rem;
+  padding-top: 0.75rem;
+}
+.branch-status {
+  min-width: 0;
+  padding-right: 0.3rem;
+}
+.branch-status p {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0.2rem 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.location-mark {
+  display: inline-flex;
+  flex: 0 0 1rem;
+  align-items: center;
+  color: var(--color-white);
+}
+.location-mark svg {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+.status-mark {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--color-open);
+}
+.hero .status-mark {
+  display: inline-flex;
+  flex: 0 0 1rem;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-white);
+}
+.hero .status-mark.hero-status-dot {
+  flex: 0 0 0.52rem;
+  width: 0.52rem;
+  height: 0.52rem;
+  border-radius: 50%;
+  background: var(--color-open);
+}
+.hero .open-status.is-unavailable .hero-status-dot {
+  background: #777;
+}
+.hero .open-status.is-unavailable {
+  color: #a5a5a5;
+}
+.hero .status-mark svg {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+.queue-count {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+  padding-left: 0.75rem;
+  border-left: 1px solid rgb(255 255 255 / 55%);
+}
+.queue-count strong {
+  font-size: clamp(2.7rem, 13vw, 4.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+}
+.queue-count span {
+  color: rgb(255 255 255 / 78%);
+  font-size: 0.59rem;
+  letter-spacing: 0.12em;
+  line-height: 1.8;
+}
+.branch-link {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.15rem;
+  padding: 0.5rem 0 0;
+  border-top: 1px solid rgb(255 255 255 / 28%);
+  color: var(--color-white);
+  font-size: 0.64rem;
+  letter-spacing: 0.15em;
+  text-decoration: none;
+}
+.branch-link span {
+  font-size: 1.2rem;
+}
+.hero-branch-data .branch-link {
+  margin-top: 0.1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgb(255 255 255 / 28%);
+}
+.hero-branch-data .branch-link > span:first-child {
+  font-size: 0.64rem;
+}
+.scroll-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.1rem 0 0 0.1rem;
+  color: var(--color-white);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+}
+.scroll-cue span:last-child {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+.site-footer {
+  flex-wrap: wrap;
+  border-top: 1px solid var(--color-gray-300);
+  color: var(--color-gray-600);
+  font-size: 0.875rem;
+}
+.site-footer p {
+  margin: 0;
+}
+.site-footer small {
+  width: 100%;
+}
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+@media (min-width: 600px) {
+  .site-header {
+    padding: 0.5rem 4vw;
+  }
+  .site-nav {
+    right: 4vw;
+  }
+  .hero {
+    min-height: calc(100svh + var(--hero-stage-shift));
+    padding: 0 4vw 2rem;
+  }
+  .hero-content {
+    padding-top: clamp(8.5rem, 14vh, 10.5rem);
+  }
+  .hero h1 {
+    font-size: clamp(8rem, 18.5vw, 17rem);
+  }
+  .hero-tagline {
+    margin-top: 1.6rem;
+  }
+  .hero-branch-tabs {
+    max-width: 42rem;
+    gap: 0.8rem;
+  }
+  .hero-branch-tab {
+    padding-inline: 0.65rem;
+    font-size: 0.62rem;
+  }
+  .hero-branch-data {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 1rem;
+    padding-top: 0.9rem;
+  }
+  .branch-status {
+    padding-right: 1rem;
+  }
+  .queue-count {
+    padding-left: 1.4rem;
+  }
+  .branch-link {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+    margin-top: 0;
+    padding: 0.55rem 0 0;
+    border-top: 1px solid rgb(255 255 255 / 28%);
+    border-left: 0;
+  }
+  .queue-count strong {
+    font-size: clamp(3.5rem, 6vw, 5rem);
+  }
+  .queue-count span {
+    font-size: 0.7rem;
+  }
+  .scroll-cue {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (min-width: 800px) {
+  .hero-branch-data {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1rem;
+  }
+  .hero-branch-data .branch-link {
+    grid-column: auto;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0 0 0 1.4rem;
+    border-top: 0;
+    border-left: 1px solid rgb(255 255 255 / 55%);
+  }
+}
+
+@media (min-width: 960px) {
+  .site-header {
+    padding-inline: 5vw;
+  }
+  .site-nav {
+    right: 5vw;
+  }
+  .hero {
+    padding-inline: 5vw;
+  }
+  .hero-image,
+  .hero-foreground {
+    object-position: 50% 43%;
+  }
+  .hero h1 {
+    font-size: min(18vw, 18rem);
+  }
+}
+
+@media (max-width: 759px) {
+  html,
+  body {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  .site-header {
+    align-items: flex-start;
+    padding-top: 0.25rem;
+  }
+  .site-header .wordmark {
+    position: relative;
+    z-index: 6;
+  }
+  .site-header .teamcut-wordmark {
+    height: 2.625rem;
+  }
+  .menu-toggle {
+    z-index: 7;
+    background: transparent;
+  }
+  .site-nav {
+    position: fixed;
+    z-index: 5;
+    inset: 0;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    flex-direction: column;
+    justify-content: center;
+    padding: 7rem max(1.5rem, 8vw) 3rem;
+    border: 0;
+    background: rgb(7 7 7 / 91%);
+  }
+  .site-nav a {
+    display: block;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgb(255 255 255 / 24%);
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    font-size: clamp(1.5rem, 7vw, 2.25rem);
+    font-weight: 400;
+    letter-spacing: 0.015em;
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+  }
+  .site-nav a:last-child {
+    border-bottom: 0;
+  }
+  .site-nav a:hover,
+  .site-nav a:focus-visible {
+    color: var(--color-accent);
+  }
+}
+
+/* Styling section lain tetap menggunakan fondasi sebelumnya. */
+.section-heading {
+  margin-bottom: 2rem;
+}
+.section-heading h2,
+.booking h2 {
+  margin: 0.35rem 0 0;
+  font-size: clamp(2rem, 8vw, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+.branch-list {
+  border-top: 1px solid var(--color-gray-300);
+}
+.branch-item {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--color-gray-300);
+}
+.branch-item h3,
+.service-item h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+.branch-item p {
+  margin: 0.25rem 0;
+  color: var(--color-gray-600);
+}
+.branch-item .queue {
+  color: var(--color-black);
+  font-size: 0.875rem;
+}
+.supporting-note {
+  color: var(--color-gray-600);
+  font-size: 0.875rem;
+}
+.services {
+  max-width: none;
+  margin: 0;
+  padding: 4.5rem 1.25rem 5rem;
+  background: #090909;
+  color: var(--color-white);
+}
+.services-inner {
+  width: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
+}
+.services-heading {
+  margin-bottom: 2rem;
+}
+.services-kicker {
+  margin: 0 0 0.15rem;
+  color: #b8b8b8;
+  font-size: 0.8rem;
+  letter-spacing: 0.34em;
+}
+.services-title {
+  margin: 0;
+  color: var(--color-white);
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(4rem, 16vw, 10rem);
+  font-weight: 400;
+  line-height: 0.83;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+.services-title span {
+  color: var(--color-accent);
+}
+.services-intro {
+  margin: 1rem 0 0;
+  color: #c4c4c4;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  line-height: 1.9;
+}
+.services-rule {
+  display: block;
+  width: 2.5rem;
+  height: 2px;
+  margin-top: 0.9rem;
+  background: var(--color-white);
+}
+.service-list {
+  margin: 2rem 0 0;
+  padding: 0;
+  border-top: 1px solid #555;
+  list-style: none;
+}
+.services .service-item {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) 6rem;
+  align-items: start;
+  column-gap: 0.65rem;
+  padding: 1rem 0 1.1rem;
+  border-bottom: 1px solid #484848;
+}
+.service-number {
+  min-height: 100%;
+  padding: 0.12rem 0.45rem 0 0;
+  border-right: 1px solid #777;
+  color: #c4c4c4;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+.service-copy {
+  min-width: 0;
+}
+.services .service-copy h3 {
+  margin: 0;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(1.65rem, 7vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+.service-copy p {
+  max-width: 25ch;
+  margin: 0.35rem 0 0;
+  color: #c4c4c4;
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+.service-price {
+  padding-top: 0.15rem;
+  font-variant-numeric: tabular-nums;
+}
+.service-price-label {
+  display: block;
+  color: #c4c4c4;
+  font-size: 0.47rem;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+}
+.service-price strong {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--color-white);
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: 1.12rem;
+  font-weight: 400;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+.service-price.is-unavailable strong {
+  color: #a5a5a5;
+}
+.service-arrow {
+  display: none;
+}
+.whatsapp-cta {
+  max-width: none;
+  margin: 0;
+  padding: clamp(5.5rem, 13vw, 9rem) 1.25rem clamp(5rem, 10vw, 7rem);
+  border-top: 1px solid #414141;
+  background: #090909;
+  color: var(--color-white);
+}
+.whatsapp-cta-inner {
+  width: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
+}
+.whatsapp-cta-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+}
+.whatsapp-cta-lead {
+  font-size: clamp(2.25rem, 8vw, 5.25rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.065em;
+}
+.whatsapp-cta-main {
+  max-width: 100%;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(2.5rem, 13.3vw, 8.5rem);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+.whatsapp-cta-support {
+  margin: 0.8rem 0 0;
+  color: #c4c4c4;
+  font-size: clamp(0.85rem, 3vw, 1.2rem);
+  letter-spacing: 0.18em;
+}
+.whatsapp-cta-rule {
+  display: block;
+  width: 3.5rem;
+  height: 2px;
+  margin-top: 1.4rem;
+  background: var(--color-white);
+}
+.whatsapp-cta-copy {
+  max-width: 24rem;
+  margin: 1.5rem 0 2rem;
+  color: #b8b8b8;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.whatsapp-cta-link {
+  display: flex;
+  width: 100%;
+  max-width: 34rem;
+  min-height: 4.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  border: 1px solid #d7d7d7;
+  border-radius: 999px;
+  color: var(--color-white);
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.025em;
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+.whatsapp-cta-link:hover,
+.whatsapp-cta-link:focus-visible {
+  background: var(--color-white);
+  color: var(--color-black);
+}
+.whatsapp-cta-arrow {
+  font-family: var(--font-body);
+  font-size: 1.8rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+@media (min-width: 720px) {
+  .branch-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 2rem;
+  }
+  .branch-item {
+    align-self: start;
+  }
+  .services {
+    padding: 6rem 4vw 6.5rem;
+  }
+  .services-heading {
+    margin-bottom: 2.5rem;
+  }
+  .services-kicker {
+    font-size: 1rem;
+  }
+  .services-intro {
+    margin-top: 1.2rem;
+    font-size: 0.82rem;
+  }
+  .service-list {
+    margin-top: 2.5rem;
+  }
+  .services .service-item {
+    grid-template-columns: 3rem minmax(0, 1fr) 11rem 2.5rem;
+    align-items: center;
+    column-gap: 1.25rem;
+    padding: 1.45rem 0.25rem;
+  }
+  .service-number {
+    min-height: 3.4rem;
+    padding-top: 0.3rem;
+    font-size: 1rem;
+  }
+  .services .service-copy h3 {
+    font-size: clamp(2.3rem, 5vw, 3.5rem);
+  }
+  .service-copy p {
+    margin-top: 0.45rem;
+    font-size: 1rem;
+  }
+  .service-price {
+    padding-top: 0;
+  }
+  .service-price-label {
+    font-size: 0.64rem;
+  }
+  .service-price strong {
+    margin-top: 0.3rem;
+    font-size: 1.7rem;
+  }
+  .service-price.is-unavailable strong {
+    font-size: 1.3rem;
+  }
+  .service-arrow {
+    display: block;
+    color: var(--color-white);
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1;
+    text-align: right;
+  }
+  .site-footer small {
+    width: auto;
+  }
+}
+
+@media (max-width: 359px) {
+  .services {
+    padding-inline: 1rem;
+  }
+  .services .service-item {
+    grid-template-columns: 1.8rem minmax(0, 1fr) 5.45rem;
+    column-gap: 0.5rem;
+  }
+  .services .service-copy h3 {
+    font-size: 1.5rem;
+  }
+  .service-price-label {
+    font-size: 0.43rem;
+  }
+  .service-price strong {
+    font-size: 1rem;
+  }
+}
+
+/* Cabang + Hairstylist: slider editorial satu cabang per slide. */
+.branches {
+  max-width: none;
+  margin: 0;
+  padding: 4.5rem 1.25rem 3.5rem;
+  background: var(--color-black);
+  color: var(--color-white);
+}
+.branches-inner {
+  width: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
+}
+.branches .section-heading {
+  margin: 0;
+}
+.branches .section-heading h2 {
+  color: var(--color-white);
+  font-size: clamp(2.2rem, 9vw, 4rem);
+}
+.branches .eyebrow {
+  color: #a5a5a5;
+}
+.branches-heading {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+.branch-lead {
+  max-width: 24rem;
+  margin: 0;
+  color: #b8b8b8;
+  font-size: 0.9rem;
+}
+.branch-navigation {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid #414141;
+}
+.branch-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.branch-marker {
+  width: 1.2rem;
+  height: 2px;
+  padding: 0;
+  border: 0;
+  background: #626262;
+  cursor: pointer;
+  transition:
+    width 0.2s ease,
+    background-color 0.2s ease;
+}
+.branch-marker[aria-current="true"] {
+  width: 2rem;
+  background: var(--color-accent);
+}
+.branch-page-count {
+  margin: 0 auto 0 0;
+  color: #929292;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+}
+.branch-page-count span {
+  color: var(--color-white);
+}
+.branch-arrows {
+  display: flex;
+  gap: 0.4rem;
+}
+.branch-arrows button {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid #5a5a5a;
+  background: transparent;
+  color: var(--color-white);
+  font: inherit;
+  cursor: pointer;
+}
+.branch-arrows button:disabled {
+  color: #656565;
+  cursor: default;
+}
+.branch-track {
+  display: flex;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.branch-track::-webkit-scrollbar {
+  display: none;
+}
+.branch-slide {
+  display: grid;
+  flex: 0 0 100%;
+  min-width: 0;
+  align-content: start;
+  gap: 2rem;
+  padding: 1.5rem 0 2rem;
+  border-top: 1px solid #414141;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.branch-index {
+  margin: 0 0 0.75rem;
+  color: #a5a5a5;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+}
+.branch-copy h3 {
+  margin: 0;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(2.8rem, 12.5vw, 6rem);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+}
+.branch-facts {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin: 1.5rem 0 1rem;
+  padding: 0.85rem 0;
+  border-block: 1px solid #414141;
+}
+.branch-open-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 7rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.branches .status-mark {
+  flex: 0 0 auto;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--color-accent);
+}
+.branch-open-status.is-unavailable {
+  color: #a5a5a5;
+  letter-spacing: 0.07em;
+}
+.branch-queue {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding-left: 1rem;
+  border-left: 1px solid #5a5a5a;
+}
+.branch-queue strong {
+  font-size: clamp(2.5rem, 11vw, 3.75rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+}
+.branch-queue span {
+  color: #b8b8b8;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  line-height: 1.7;
+}
+.branch-map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--color-white);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+}
+.hairstylist-arrow {
+  color: var(--color-accent);
+  font-size: 1rem;
+}
+.hairstylist-roster {
+  border-top: 1px solid #414141;
+}
+.roster-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 0 0.35rem;
+}
+.roster-heading .eyebrow {
+  margin: 0;
+  font-size: 0.65rem;
+}
+.roster-heading > span {
+  color: #8b8b8b;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+}
+.hairstylist-item {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 3.5rem 1fr auto;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.8rem 0;
+  border: 0;
+  border-bottom: 1px solid #414141;
+  background: transparent;
+  color: var(--color-white);
+  text-align: left;
+  cursor: pointer;
+}
+.hairstylist-photo {
+  display: grid;
+  width: 3.5rem;
+  aspect-ratio: 4 / 5;
+  place-items: center;
+  border: 1px solid #515151;
+  background: #202020;
+  color: #929292;
+}
+.hairstylist-photo > span {
+  font-size: 0.48rem;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+  text-align: center;
+}
+.hairstylist-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.hairstylist-item:hover .hairstylist-name,
+.hairstylist-item:focus-visible .hairstylist-name {
+  color: #d5d5d5;
+}
+.branch-swipe-note {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1rem 0 0;
+  color: #929292;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+}
+.branch-swipe-note span {
+  color: var(--color-accent);
+  font-size: 0.9rem;
+}
+.hairstylist-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 0;
+  background: #090909;
+  color: var(--color-white);
+}
+.hairstylist-dialog::backdrop {
+  background: rgb(0 0 0 / 78%);
+}
+.hairstylist-detail {
+  min-height: 100%;
+  background: #090909;
+}
+.hairstylist-detail-topline {
+  position: sticky;
+  z-index: 5;
+  top: 0;
+  display: grid;
+  min-height: 3.25rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: #090909;
+}
+.hairstylist-detail-topline .eyebrow {
+  margin: 0;
+  color: var(--color-white);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+}
+.hairstylist-close {
+  position: absolute;
+  z-index: 6;
+  top: 0.5rem;
+  right: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 2.25rem;
+  padding: 0.25rem 0 0.25rem 0.75rem;
+  border: 0;
+  background: transparent;
+  color: #d1d1d1;
+  font: inherit;
+  font-size: 0.62rem;
+  letter-spacing: 0.13em;
+  cursor: pointer;
+}
+.hairstylist-close span {
+  padding-left: 0.25rem;
+  color: var(--color-accent);
+  font-size: 1.1rem;
+}
+.hairstylist-detail-body {
+  display: grid;
+}
+.hairstylist-detail-intro {
+  display: grid;
+  gap: 0;
+  padding: 0;
+}
+.hairstylist-detail-photo {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: min(58svh, 34rem);
+  min-height: 18rem;
+  aspect-ratio: auto;
+  place-items: center;
+  overflow: hidden;
+  background: #202020;
+  color: #a5a5a5;
+}
+.hairstylist-detail-photo span {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+}
+.hairstylist-detail-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 28%;
+}
+.hairstylist-detail-intro-copy {
+  position: relative;
+  padding: 1.15rem 1.25rem 1.6rem;
+}
+.hairstylist-detail-intro .eyebrow {
+  margin: 0 0 0.4rem;
+  color: #9b9b9b;
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+}
+.hairstylist-detail-intro h2 {
+  margin: 0;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(4rem, 17vw, 6.5rem);
+  font-weight: 400;
+  line-height: 0.8;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+}
+.hairstylist-detail-intro h2::after {
+  color: var(--color-accent);
+  content: ".";
+}
+.hairstylist-detail-copy {
+  padding: 0 1.25rem 2.5rem;
+}
+.hairstylist-detail-section {
+  padding: 0;
+}
+.hairstylist-detail-section + .hairstylist-detail-section {
+  margin-top: 1.65rem;
+}
+.hairstylist-detail-section h3 {
+  margin: 0 0 0.45rem;
+  color: #909090;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.hairstylist-detail-section p {
+  margin: 0;
+  color: #d0d0d0;
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+.hairstylist-detail-section [data-detail-certificates] > p,
+.hairstylist-detail-section [data-detail-portfolio] > p {
+  color: #888;
+}
+.hairstylist-detail-list {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hairstylist-detail-entry {
+  display: grid;
+  gap: 0.35rem;
+  color: #b8b8b8;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+.hairstylist-detail-entry strong {
+  color: var(--color-white);
+}
+.hairstylist-detail-entry img {
+  width: 100%;
+  max-height: 24rem;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.hairstylist-booking {
+  display: flex;
+  min-height: 3.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid #555;
+  color: var(--color-white);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+}
+.hairstylist-booking span {
+  color: var(--color-accent);
+  font-size: 1rem;
+}
+
+@media (min-width: 760px) {
+  .branches {
+    padding: 6rem 3rem 5rem;
+  }
+  .branches-heading {
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+    margin-bottom: 2.5rem;
+  }
+  .branch-lead {
+    justify-self: end;
+    padding-bottom: 0.35rem;
+  }
+  .branch-navigation {
+    gap: 1rem;
+  }
+  .branch-slide {
+    min-height: 35rem;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.72fr);
+    align-items: center;
+    gap: clamp(2rem, 6vw, 6rem);
+    padding-block: 3rem;
+  }
+  .branch-copy h3 {
+    font-size: clamp(4.5rem, 8vw, 7rem);
+  }
+  .branch-facts {
+    gap: 1.5rem;
+  }
+  .hairstylist-roster {
+    align-self: center;
+    padding-left: clamp(1.5rem, 4vw, 3.5rem);
+    border-top: 0;
+    border-left: 1px solid #414141;
+  }
+  .roster-heading {
+    padding-top: 0;
+  }
+  .hairstylist-item {
+    grid-template-columns: 4rem 1fr auto;
+  }
+  .hairstylist-photo {
+    width: 4rem;
+  }
+  .hairstylist-dialog {
+    inset: 0;
+    width: min(72rem, calc(100% - 4rem));
+    height: min(90dvh, 56rem);
+    margin: auto;
+  }
+  .hairstylist-detail-topline {
+    padding-inline: 2rem;
+  }
+  .hairstylist-close {
+    right: 2rem;
+  }
+  .hairstylist-detail-body {
+    grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.95fr);
+    column-gap: clamp(2rem, 5vw, 4rem);
+    padding: 0 2rem 2.5rem;
+  }
+  .hairstylist-detail-photo {
+    height: min(65dvh, 40rem);
+    min-height: 24rem;
+  }
+  .hairstylist-detail-intro-copy {
+    padding: 1.35rem 0 0;
+  }
+  .hairstylist-detail-intro h2 {
+    font-size: clamp(5rem, 7vw, 7rem);
+  }
+  .hairstylist-detail-copy {
+    padding: 2rem 0 0;
+  }
+  .hairstylist-detail-section + .hairstylist-detail-section {
+    margin-top: 2rem;
+  }
+}
+
+/* Visual refresh for the branch and Hairstylist section. */
+.branches {
+  padding: 4rem 1.25rem 3.5rem;
+  background: #090909;
+  color: var(--color-white);
+}
+.branches-inner {
+  max-width: 1120px;
+}
+.branches-heading {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+.branches-heading-copy .eyebrow {
+  margin-bottom: 0.9rem;
+  color: #d0d0d0;
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+}
+.branches-heading h2 {
+  display: grid;
+  margin: 0;
+  color: var(--color-white);
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(3rem, 13vw, 7rem);
+  font-weight: 400;
+  line-height: 0.83;
+  letter-spacing: -0.055em;
+}
+.branches-heading h2 span {
+  display: block;
+}
+.branch-lead {
+  margin: 1.25rem 0 0;
+  color: #c1c1c1;
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  line-height: 1.8;
+}
+.heading-rule {
+  display: block;
+  width: 2.5rem;
+  height: 1px;
+  margin-top: 0.8rem;
+  background: var(--color-white);
+}
+.branch-side-index {
+  display: flex;
+  min-width: 1.5rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  align-self: center;
+  margin-top: 5rem;
+  color: var(--color-white);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+}
+.branch-side-index i {
+  display: block;
+  width: 1px;
+  height: 3.25rem;
+  background: var(--color-white);
+}
+.branch-track {
+  gap: 1rem;
+  padding-right: 0.75rem;
+  scroll-padding-inline: 0;
+  touch-action: pan-x pan-y;
+}
+.branch-slide {
+  display: flex;
+  flex: 0 0 calc(100% - 2rem);
+  min-height: 0;
+  flex-direction: column;
+  gap: 1.6rem;
+  padding: 0;
+  border: 0;
+}
+.branch-panel {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 0.45rem;
+  overflow: hidden;
+  border: 1px solid #343434;
+  border-radius: 0.3rem;
+  background: #0d0d0d;
+}
+.branch-panel::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-image: url("../assets/images/teamcut-logo.png");
+  background-repeat: no-repeat;
+  background-position: center 15%;
+  background-size: auto 85%;
+  content: "";
+  filter: invert(1);
+  opacity: 0.13;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.branch-panel > * {
+  position: relative;
+  z-index: 1;
+}
+.branch-panel .branch-photo-card {
+  border: 0;
+  border-radius: 0.15rem;
+  background: transparent;
+}
+.branch-panel .branch-photo-placeholder {
+  background: transparent;
+}
+.branch-panel .branch-photo-placeholder > span {
+  display: none;
+}
+.branch-panel .hairstylist-area {
+  padding-inline: 0.15rem;
+}
+.branch-photo-card {
+  position: relative;
+  display: flex;
+  width: 100%;
+  aspect-ratio: 1.34 / 1;
+  min-height: 14rem;
+  align-items: flex-end;
+  overflow: hidden;
+  border: 1px solid #3a3a3a;
+  border-radius: 0.45rem;
+  background: #181818;
+}
+.branch-photo-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #181818;
+  color: #777;
+}
+.branch-photo-placeholder img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.data-error {
+  margin: 0.8rem 0;
+  color: #f0b2b2;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+.branch-photo-placeholder span {
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  line-height: 1.8;
+  text-align: center;
+}
+.branch-card-info {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.4rem 0.7rem;
+  padding: 0.8rem 0.7rem;
+  border-top: 1px solid #454545;
+  background: rgb(0 0 0 / 68%);
+}
+.branch-card-name {
+  min-width: 0;
+}
+.branch-card-name h3 {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(1.4rem, 6.8vw, 2.6rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+.branch-open-status {
+  min-width: 0;
+  margin: 0.4rem 0 0;
+  color: var(--color-white);
+  font-size: 0.58rem;
+  letter-spacing: 0.17em;
+}
+.branch-open-status.is-unavailable {
+  color: #a5a5a5;
+}
+.branches .branch-open-status.is-unavailable .status-mark {
+  background: #777;
+}
+.branches .status-mark {
+  width: 0.55rem;
+  height: 0.55rem;
+  background: var(--color-open);
+}
+.branch-queue {
+  gap: 0.35rem;
+  padding: 0 0.35rem;
+  border: 0;
+  border-left: 1px solid #626262;
+}
+.branch-queue strong {
+  font-size: clamp(1.75rem, 7.3vw, 3.35rem);
+}
+.branch-queue span {
+  font-size: 0.43rem;
+  letter-spacing: 0.1em;
+}
+.branch-map-link {
+  display: inline-flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-self: end;
+  gap: 0.55rem;
+  min-height: 2rem;
+  margin-top: 0.15rem;
+  color: var(--color-white);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+}
+.branch-map-link span {
+  color: inherit;
+}
+.branch-map-link i {
+  color: var(--color-accent);
+  font-size: 1.1rem;
+  font-style: normal;
+}
+.branch-map-link:hover,
+.branch-map-link:focus-visible {
+  color: #c8c8c8;
+}
+.hairstylist-area {
+  min-width: 0;
+}
+.hairstylist-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.65rem;
+}
+.hairstylist-heading h4 {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+}
+.hairstylist-heading h4 span {
+  padding-left: 0.35rem;
+  color: #8f8f8f;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+}
+.hairstylist-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-white);
+  font: inherit;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+.hairstylist-view-all span {
+  color: var(--color-accent);
+  font-size: 0.95rem;
+}
+.hairstylist-gallery {
+  display: flex;
+  gap: 0.7rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.hairstylist-gallery::-webkit-scrollbar {
+  display: none;
+}
+.hairstylist-card {
+  position: relative;
+  display: block;
+  flex: 0 0 62%;
+  min-width: 0;
+  aspect-ratio: 3 / 3.8;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #363636;
+  border-radius: 0.2rem;
+  background: #181818;
+  color: var(--color-white);
+  text-align: left;
+  cursor: pointer;
+  scroll-snap-align: start;
+}
+.hairstylist-card-photo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #1b1b1b;
+  color: #777;
+}
+.hairstylist-card-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hairstylist-card-photo > span {
+  font-size: 0.52rem;
+  letter-spacing: 0.15em;
+}
+.hairstylist-avatar {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  background: #202020;
+  color: #969696;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(3rem, 16vw, 6rem);
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+.hairstylist-card-photo .hairstylist-avatar {
+  font-size: clamp(3rem, 16vw, 6rem);
+}
+.hairstylist-avatar.is-generic svg {
+  display: block;
+  width: 34%;
+  height: auto;
+  fill: currentColor;
+}
+.hairstylist-detail-photo .hairstylist-avatar {
+  position: absolute;
+  inset: 0;
+  font-size: clamp(5rem, 24vw, 9rem);
+}
+.hairstylist-card.is-placeholder {
+  border-color: #292929;
+  color: #8a8a8a;
+  cursor: default;
+}
+.hairstylist-card.is-placeholder .hairstylist-card-photo {
+  background: #141414;
+}
+.hairstylist-card.is-placeholder .hairstylist-card-caption {
+  background: rgb(0 0 0 / 72%);
+}
+.hairstylist-card.is-placeholder .hairstylist-card-caption strong {
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+}
+.hairstylist-card.is-placeholder .hairstylist-card-caption small {
+  color: #888;
+  font-size: 0.48rem;
+}
+.hairstylist-card-caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.1rem 0.4rem;
+  padding: 0.65rem;
+  background: rgb(0 0 0 / 82%);
+}
+.hairstylist-card-caption strong {
+  font-size: 1rem;
+  line-height: 1;
+}
+.hairstylist-card-caption small {
+  color: #d0d0d0;
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+}
+.hairstylist-card-caption i {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  color: var(--color-white);
+  font-size: 1.15rem;
+  font-style: normal;
+}
+.hairstylist-card:hover .hairstylist-card-caption strong,
+.hairstylist-card:focus-visible .hairstylist-card-caption strong {
+  color: #d0d0d0;
+}
+.branch-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+.branch-controls > button {
+  padding: 0.3rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-white);
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+.branch-controls > button:disabled {
+  color: #626262;
+  cursor: default;
+}
+.branch-controls .branch-pagination {
+  gap: 0.55rem;
+}
+.branch-controls .branch-marker {
+  width: 2rem;
+  height: 3px;
+  background: #484848;
+}
+.branch-controls .branch-marker[aria-current="true"] {
+  width: 3rem;
+  background: var(--color-white);
+}
+
+@media (min-width: 760px) {
+  .branches {
+    padding: 5rem 3rem 4.5rem;
+  }
+  .branches-heading {
+    grid-template-columns: minmax(0, 1fr) auto;
+    margin-bottom: 2.25rem;
+  }
+  .branches-heading h2 {
+    font-size: clamp(4rem, 9vw, 7.5rem);
+  }
+  .branch-lead {
+    margin-top: 1.5rem;
+    font-size: 0.78rem;
+  }
+  .branch-side-index {
+    margin-top: 6rem;
+  }
+  .branch-slide {
+    flex-basis: calc(100% - 3rem);
+    gap: 2rem;
+  }
+  .branch-panel {
+    gap: 1.4rem;
+    padding: 0.75rem;
+  }
+  .branch-panel .hairstylist-area {
+    padding-inline: 0.35rem;
+  }
+  .branch-photo-card {
+    aspect-ratio: 1.38 / 1;
+    min-height: 28rem;
+  }
+  .branch-card-info {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.55rem 1rem;
+    padding: 1.2rem 1.5rem;
+  }
+  .branch-card-name h3 {
+    font-size: clamp(2.5rem, 5vw, 4.4rem);
+  }
+  .branch-open-status {
+    font-size: 0.72rem;
+  }
+  .branch-queue {
+    gap: 0.7rem;
+    padding-inline: 1.2rem;
+  }
+  .branch-queue strong {
+    font-size: clamp(3.25rem, 6vw, 5rem);
+  }
+  .branch-queue span {
+    font-size: 0.65rem;
+  }
+  .branch-map-link {
+    min-height: 2.25rem;
+    font-size: 0.7rem;
+  }
+  .branch-map-link i {
+    font-size: 1.45rem;
+  }
+  .hairstylist-area {
+    margin-top: 0.25rem;
+  }
+  .hairstylist-heading {
+    margin-bottom: 0.9rem;
+  }
+  .hairstylist-heading h4 {
+    font-size: 0.9rem;
+  }
+  .hairstylist-view-all {
+    font-size: 0.68rem;
+  }
+  .hairstylist-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    overflow: visible;
+  }
+  .hairstylist-card {
+    width: 100%;
+    aspect-ratio: 1 / 1.12;
+  }
+  .hairstylist-card-caption {
+    padding: 0.85rem;
+  }
+  .hairstylist-card-caption strong {
+    font-size: 1.25rem;
+  }
+  .hairstylist-card-caption small {
+    font-size: 0.66rem;
+  }
+  .branch-controls {
+    margin-top: 1.5rem;
+  }
+}
+
+/* Gallery editorial di antara cabang dan layanan. */
+.site-gallery {
+  padding: 3rem 1.25rem 4.5rem;
+  background: #090909;
+  color: var(--color-white);
+}
+.site-gallery-inner {
+  width: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
+}
+.site-gallery-title {
+  margin: 0 0 1.5rem;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(4rem, 17vw, 10rem);
+  font-weight: 400;
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+}
+.site-gallery-title span {
+  color: var(--color-accent);
+}
+.site-gallery-grid {
+  columns: 2;
+  column-gap: 0.65rem;
+}
+.site-gallery-item {
+  break-inside: avoid;
+  margin: 0 0 0.65rem;
+  line-height: 0;
+}
+.site-gallery-item:last-child {
+  column-span: all;
+}
+.site-gallery-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: grayscale(1);
+}
+@media (min-width: 760px) {
+  .site-gallery {
+    padding: 5rem 4vw 6rem;
+  }
+  .site-gallery-title {
+    margin-bottom: 2rem;
+    font-size: clamp(6rem, 13vw, 10rem);
+  }
+  .site-gallery-grid {
+    columns: 3;
+    column-gap: 1rem;
+  }
+  .site-gallery-item {
+    margin-bottom: 1rem;
+  }
+}

@@ -6,7 +6,9 @@
   <meta name="description" content="TEAMCUT — pangkas rambut, layanan, dan informasi antrean cabang.">
   <title>TEAMCUT — Pangkas Rambut</title>
   <link rel="stylesheet" href="./css/style.css">
-  <script src="./js/app.js" defer></script>
+  <script type="module" src="./js/supabase.js"></script>
+  <script type="module" src="./js/app.js"></script>
+  <script type="module" src="./js/gallery.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -46,13 +48,15 @@
       </div>
       <img class="hero-foreground" src="./assets/images/hero.png" alt="" aria-hidden="true">
       <div class="hero-bottom">
-        <div class="queue-strip" aria-label="Informasi cabang dan antrean Cikedokan">
-          <div class="branch-status">
-            <p class="branch-name"><span class="location-mark" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span> CIKEDOKAN</p>
-            <p class="open-status"><span class="status-mark" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16 9"/></svg></span> BUKA</p>
+        <div class="queue-strip" aria-label="Informasi cabang dan antrean">
+          <div class="hero-branch-tabs" id="hero-branch-tabs" role="tablist" aria-label="Pilih cabang"></div>
+          <div class="hero-branch-data" id="hero-branch-panel" role="tabpanel" aria-live="polite">
+            <div class="branch-status">
+              <p class="open-status"><span class="status-mark hero-status-dot" aria-hidden="true"></span><span data-hero-status>—</span></p>
+            </div>
+            <div class="queue-count"><strong data-hero-queue>—</strong><span>ORANG<br>MENGANTRE</span></div>
+            <a class="branch-link" data-hero-map-link href="#cabang"><span>LIHAT LOKASI</span><span aria-hidden="true">⟶</span></a>
           </div>
-          <div class="queue-count"><strong>06</strong><span>ORANG<br>MENGANTRE</span></div>
-          <a class="branch-link" href="#cabang">LIHAT CABANG <span aria-hidden="true">⟶</span></a>
         </div>
         <a class="scroll-cue" href="#cabang"><span>GULIR</span><span aria-hidden="true">↓</span></a>
       </div>
@@ -73,65 +77,30 @@
           </div>
         </div>
 
-        <div class="branch-track" id="branch-track" role="region" aria-label="Daftar cabang TEAMCUT" tabindex="0">
-          <article class="branch-slide" data-branch-slide data-branch-id="cikedokan" aria-labelledby="branch-cikedokan-title">
+        <p class="data-error" id="site-data-error" role="alert" hidden></p>
+        <div class="branch-track" id="branch-track" role="region" aria-label="Daftar cabang TEAMCUT" tabindex="0"></div>
+        <template id="branch-slide-template">
+          <article class="branch-slide" data-branch-slide>
             <div class="branch-panel">
               <div class="branch-photo-card">
-                <div class="branch-photo-placeholder" role="img" aria-label="Foto cabang Cikedokan belum tersedia"><span>FOTO CABANG<br>MENYUSUL</span></div>
+                <div class="branch-photo-placeholder" data-branch-photo role="img"><span>FOTO CABANG BELUM TERSEDIA</span></div>
                 <div class="branch-card-info">
-                  <div class="branch-card-name"><h3 id="branch-cikedokan-title">CIKEDOKAN</h3><p class="branch-open-status"><span class="status-mark" aria-hidden="true"></span>BUKA</p></div>
-                  <div class="branch-queue"><strong data-queue="cikedokan">06</strong><span>ORANG<br>MENGANTRE</span></div>
-                  <a class="branch-map-link" href="https://maps.app.goo.gl/vV4PhJ6E7fsWR4qj6?g_st=ac" target="_blank" rel="noopener noreferrer" aria-label="Lihat Cikedokan di Google Maps"><span>LIHAT LOKASI</span><i aria-hidden="true">→</i></a>
+                  <div class="branch-card-name"><h3 data-branch-name></h3><p class="branch-open-status is-unavailable"><span class="status-mark" aria-hidden="true"></span><span data-branch-status>—</span></p></div>
+                  <div class="branch-queue"><strong data-queue>—</strong><span>ORANG<br>MENGANTRE</span></div>
+                  <a class="branch-map-link" data-branch-map target="_blank" rel="noopener noreferrer"><span>LIHAT LOKASI</span><i aria-hidden="true">→</i></a>
                 </div>
               </div>
               <div class="hairstylist-area">
-                <div class="hairstylist-heading"><h4>HAIRSTYLIST <span data-hairstylist-count="cikedokan">03</span></h4><button type="button" class="hairstylist-view-all" data-roster-more>LIHAT SEMUA <span aria-hidden="true">→</span></button></div>
-                <div class="hairstylist-gallery" role="group" aria-label="Hairstylist Cikedokan" data-hairstylist-list="cikedokan"></div>
+                <div class="hairstylist-heading"><h4>HAIRSTYLIST <span data-hairstylist-count>00</span></h4><button type="button" class="hairstylist-view-all" data-roster-more>LIHAT SEMUA <span aria-hidden="true">→</span></button></div>
+                <div class="hairstylist-gallery" role="group" data-hairstylist-list></div>
               </div>
             </div>
           </article>
-
-          <article class="branch-slide" data-branch-slide data-branch-id="jati-wangi" aria-labelledby="branch-jati-wangi-title">
-            <div class="branch-panel">
-              <div class="branch-photo-card">
-                <div class="branch-photo-placeholder" role="img" aria-label="Foto cabang Jati Wangi belum tersedia"><span>FOTO CABANG<br>MENYUSUL</span></div>
-                <div class="branch-card-info">
-                  <div class="branch-card-name"><h3 id="branch-jati-wangi-title">JATI WANGI</h3><p class="branch-open-status is-unavailable">STATUS —</p></div>
-                  <div class="branch-queue"><strong data-queue="jati-wangi">—</strong><span>ORANG<br>MENGANTRE</span></div>
-                  <a class="branch-map-link" href="https://maps.app.goo.gl/eZ2LswopysNccbZS7" target="_blank" rel="noopener noreferrer" aria-label="Lihat Jati Wangi di Google Maps"><span>LIHAT LOKASI</span><i aria-hidden="true">→</i></a>
-                </div>
-              </div>
-              <div class="hairstylist-area">
-                <div class="hairstylist-heading"><h4>HAIRSTYLIST <span data-hairstylist-count="jati-wangi">03</span></h4><button type="button" class="hairstylist-view-all" data-roster-more>LIHAT SEMUA <span aria-hidden="true">→</span></button></div>
-                <div class="hairstylist-gallery" role="group" aria-label="Hairstylist Jati Wangi" data-hairstylist-list="jati-wangi"></div>
-              </div>
-            </div>
-          </article>
-
-          <article class="branch-slide" data-branch-slide data-branch-id="jarakosta" aria-labelledby="branch-jarakosta-title">
-            <div class="branch-panel">
-              <div class="branch-photo-card">
-                <div class="branch-photo-placeholder" role="img" aria-label="Foto cabang Jarakosta belum tersedia"><span>FOTO CABANG<br>MENYUSUL</span></div>
-                <div class="branch-card-info">
-                  <div class="branch-card-name"><h3 id="branch-jarakosta-title">JARAKOSTA</h3><p class="branch-open-status is-unavailable">STATUS —</p></div>
-                  <div class="branch-queue"><strong data-queue="jarakosta">—</strong><span>ORANG<br>MENGANTRE</span></div>
-                  <a class="branch-map-link" href="https://maps.app.goo.gl/9PYoxp3zZkZq69UP6?g_st=ac" target="_blank" rel="noopener noreferrer" aria-label="Lihat Jarakosta di Google Maps"><span>LIHAT LOKASI</span><i aria-hidden="true">→</i></a>
-                </div>
-              </div>
-              <div class="hairstylist-area">
-                <div class="hairstylist-heading"><h4>HAIRSTYLIST <span data-hairstylist-count="jarakosta">02</span></h4><button type="button" class="hairstylist-view-all" data-roster-more>LIHAT SEMUA <span aria-hidden="true">→</span></button></div>
-                <div class="hairstylist-gallery" role="group" aria-label="Hairstylist Jarakosta" data-hairstylist-list="jarakosta"></div>
-              </div>
-            </div>
-          </article>
-        </div>
+        </template>
 
         <div class="branch-controls" role="group" aria-label="Kontrol geser cabang">
           <button type="button" data-branch-prev aria-label="Cabang sebelumnya">←</button>
           <div class="branch-pagination" role="group" aria-label="Pilih cabang">
-            <button class="branch-marker" type="button" data-slide-to="0" aria-label="Tampilkan cabang Cikedokan" aria-current="true"></button>
-            <button class="branch-marker" type="button" data-slide-to="1" aria-label="Tampilkan cabang Jati Wangi"></button>
-            <button class="branch-marker" type="button" data-slide-to="2" aria-label="Tampilkan cabang Jarakosta"></button>
           </div>
           <button type="button" data-branch-next aria-label="Cabang berikutnya">→</button>
         </div>
@@ -153,18 +122,18 @@
             </div>
             <div class="hairstylist-detail-copy">
               <section class="hairstylist-detail-section">
-                <h3>PROFIL</h3>
-                <p data-detail-bio>Profil belum tersedia.</p>
+                <h3>BIO</h3>
+                <p data-detail-bio>Bio belum tersedia.</p>
               </section>
               <section class="hairstylist-detail-section">
-                <h3>Sertifikasi</h3>
-                <div data-detail-certificates><p>Sertifikat belum tersedia.</p></div>
+                <h3>UNGGULAN</h3>
+                <p data-detail-keunggulan>Belum tersedia.</p>
               </section>
               <section class="hairstylist-detail-section">
-                <h3>PORTOFOLIO</h3>
-                <div data-detail-portfolio><p>Portofolio belum tersedia.</p></div>
+                <h3>INSTAGRAM</h3>
+                <a class="hairstylist-detail-instagram" data-detail-instagram target="_blank" rel="noopener noreferrer">Belum tersedia.</a>
               </section>
-              <a class="hairstylist-booking" data-detail-booking href="https://wa.me/6285212034230" target="_blank" rel="noopener noreferrer">HUBUNGI KAMI VIA WHATSAPP <span aria-hidden="true">↗</span></a>
+              <a class="hairstylist-booking" data-detail-booking target="_blank" rel="noopener noreferrer" hidden>HUBUNGI VIA WHATSAPP <span aria-hidden="true">↗</span></a>
             </div>
           </div>
         </div>
@@ -173,23 +142,26 @@
 
     <section class="site-gallery" id="gallery" aria-labelledby="gallery-title">
       <div class="site-gallery-inner">
-        <h2 class="site-gallery-title" id="gallery-title">GALLERY<span>.</span></h2>
-        <div class="site-gallery-grid" role="group" aria-label="Foto kegiatan TEAMCUT">
-          <figure class="site-gallery-item">
-            <img src="./assets/images/gallery-01.jpg" alt="Barber TEAMCUT memotong rambut klien di depan cermin." loading="lazy" decoding="async">
-          </figure>
-          <figure class="site-gallery-item">
-            <img src="./assets/images/gallery-02.jpg" alt="Suasana barbershop saat barber merapikan rambut klien." loading="lazy" decoding="async">
-          </figure>
-          <figure class="site-gallery-item">
-            <img src="./assets/images/gallery-03.jpg" alt="Detail potongan rambut saat sedang dikerjakan." loading="lazy" decoding="async">
-          </figure>
-          <figure class="site-gallery-item">
-            <img src="./assets/images/gallery-04.jpg" alt="Barber menyisir rambut klien sebelum merapikan potongannya." loading="lazy" decoding="async">
-          </figure>
-          <figure class="site-gallery-item">
-            <img src="./assets/images/gallery-05.jpg" alt="Barber bekerja di area TEAMCUT dengan mural di latar." loading="lazy" decoding="async">
-          </figure>
+        <p class="eyebrow site-gallery-kicker">RUANG TEAMCUT</p>
+        <h2 class="site-gallery-title" id="gallery-title">GALERI<span>.</span></h2>
+        <div class="gallery-branch-tabs" role="tablist" aria-label="Pilih galeri cabang">
+          <button class="gallery-branch-tab" id="gallery-tab-cikedokan" type="button" role="tab" aria-selected="true" aria-controls="gallery-panel" tabindex="0" data-gallery-branch="cikedokan">CIKEDOKAN</button>
+          <button class="gallery-branch-tab" id="gallery-tab-jatiwangi" type="button" role="tab" aria-selected="false" aria-controls="gallery-panel" tabindex="-1" data-gallery-branch="jatiwangi">JATI WANGI</button>
+          <button class="gallery-branch-tab" id="gallery-tab-jarakosta" type="button" role="tab" aria-selected="false" aria-controls="gallery-panel" tabindex="-1" data-gallery-branch="jarakosta">JARAKOSTA</button>
+        </div>
+        <div class="gallery-panel" id="gallery-panel" role="tabpanel" aria-labelledby="gallery-tab-cikedokan">
+          <div class="gallery-photo-stage" data-gallery-stage tabindex="0" aria-label="Foto galeri cabang TEAMCUT">
+            <img class="gallery-photo" data-gallery-image alt="" loading="lazy" decoding="async" draggable="false" hidden>
+            <p class="gallery-empty" data-gallery-empty hidden>FOTO CABANG BELUM TERSEDIA.</p>
+          </div>
+          <div class="gallery-toolbar">
+            <p class="gallery-counter"><span data-gallery-branch-name>CIKEDOKAN</span><span data-gallery-count aria-live="polite">00 / 00</span></p>
+            <div class="gallery-controls" role="group" aria-label="Navigasi foto galeri">
+              <button class="gallery-control" type="button" data-gallery-prev aria-label="Foto sebelumnya" disabled>←</button>
+              <button class="gallery-control" type="button" data-gallery-next aria-label="Foto berikutnya" disabled>→</button>
+            </div>
+          </div>
+          <p class="gallery-caption" data-gallery-caption aria-live="polite">Foto cabang ini belum tersedia.</p>
         </div>
       </div>
     </section>
@@ -203,123 +175,63 @@
           <span class="services-rule" aria-hidden="true"></span>
         </header>
 
-        <ol class="service-list">
-          <li class="service-item">
-            <span class="service-number">01</span>
-            <div class="service-copy">
-              <h3>HAIRCUT</h3>
-            </div>
-            <div class="service-price">
-              <span class="service-price-label">PRICE</span>
-              <strong>Rp40.000</strong>
-            </div>
-            <span class="service-arrow" aria-hidden="true">→</span>
-          </li>
-          <li class="service-item">
-            <span class="service-number">02</span>
-            <div class="service-copy">
-              <h3>HAIRWASH + STYLING</h3>
-            </div>
-            <div class="service-price">
-              <span class="service-price-label">PRICE</span>
-              <strong>Rp15.000</strong>
-            </div>
-            <span class="service-arrow" aria-hidden="true">→</span>
-          </li>
-          <li class="service-item">
-            <span class="service-number">03</span>
-            <div class="service-copy">
-              <h3>HAIRLIGHT</h3>
-            </div>
-            <div class="service-price">
-              <span class="service-price-label">PRICE</span>
-              <strong>Rp250.000</strong>
-            </div>
-            <span class="service-arrow" aria-hidden="true">→</span>
-          </li>
-          <li class="service-item">
-            <span class="service-number">04</span>
-            <div class="service-copy">
-              <h3>FULL COLOURING</h3>
-            </div>
-            <div class="service-price">
-              <span class="service-price-label">PRICE</span>
-              <strong>Rp350.000</strong>
-            </div>
-            <span class="service-arrow" aria-hidden="true">→</span>
-          </li>
-          <li class="service-item">
-            <span class="service-number">05</span>
-            <div class="service-copy">
-              <h3>BLACK COLOURING</h3>
-            </div>
-            <div class="service-price">
-              <span class="service-price-label">PRICE</span>
-              <strong>Rp100.000</strong>
-            </div>
-            <span class="service-arrow" aria-hidden="true">→</span>
-          </li>
-          <li class="service-item">
-            <span class="service-number">06</span>
-            <div class="service-copy">
-              <h3>PERMING</h3>
-            </div>
-            <div class="service-price">
-              <span class="service-price-label">PRICE</span>
-              <strong>Rp250.000</strong>
-            </div>
-            <span class="service-arrow" aria-hidden="true">→</span>
-          </li>
-          <li class="service-item">
-            <span class="service-number">07</span>
-            <div class="service-copy">
-              <h3>CONDROW</h3>
-            </div>
-            <div class="service-price">
-              <span class="service-price-label">PRICE</span>
-              <strong>Rp300.000</strong>
-            </div>
-            <span class="service-arrow" aria-hidden="true">→</span>
-          </li>
-          <li class="service-item">
-            <span class="service-number">08</span>
-            <div class="service-copy">
-              <h3>KERATIN STRAIGHT</h3>
-            </div>
-            <div class="service-price">
-              <span class="service-price-label">PRICE</span>
-              <strong>Rp250.000</strong>
-            </div>
-            <span class="service-arrow" aria-hidden="true">→</span>
-          </li>
-          <li class="service-item">
-            <span class="service-number">09</span>
-            <div class="service-copy">
-              <h3>PERMING CURLY</h3>
-            </div>
-            <div class="service-price">
-              <span class="service-price-label">PRICE</span>
-              <strong>Rp250.000</strong>
-            </div>
-            <span class="service-arrow" aria-hidden="true">→</span>
-          </li>
-        </ol>
+        <ol class="service-list"></ol>
       </div>
     </section>
 
     <section class="section whatsapp-cta" id="cta-whatsapp" aria-labelledby="cta-title">
       <div class="whatsapp-cta-inner">
         <h2 class="whatsapp-cta-title" id="cta-title">
-          <span class="whatsapp-cta-lead">ADA</span>
-          <span class="whatsapp-cta-main">PERTANYAAN?</span>
+          <span class="whatsapp-cta-lead">BUAT</span>
+          <span class="whatsapp-cta-main">PESANAN.</span>
         </h2>
-        <p class="whatsapp-cta-support">KAMI SIAP MEMBANTU.</p>
+        <p class="whatsapp-cta-support">KIRIM PERMINTAAN VIA WHATSAPP.</p>
         <span class="whatsapp-cta-rule" aria-hidden="true"></span>
-        <p class="whatsapp-cta-copy">Tanya soal layanan, harga, atau pemesanan lewat WhatsApp.</p>
-        <a class="whatsapp-cta-link" href="https://wa.me/6285212034230?text=Halo%20TEAMCUT%2C%20saya%20ingin%20bertanya%20mengenai%20layanan%20TEAMCUT." target="_blank" rel="noopener noreferrer">
-          <span>HUBUNGI KAMI</span>
-          <span class="whatsapp-cta-arrow" aria-hidden="true">→</span>
-        </a>
+        <p class="whatsapp-cta-copy">Isi detail pemesanan. Hairstylist akan mengecek ketersediaan dan mengonfirmasi jadwal secara manual melalui WhatsApp.</p>
+        <form class="booking-form" id="booking-form">
+          <div class="booking-fields">
+            <label class="booking-field">
+              <span>CABANG</span>
+              <select id="booking-branch" name="branch" required disabled>
+                <option value="">PILIH CABANG</option>
+              </select>
+            </label>
+            <label class="booking-field">
+              <span>HAIRSTYLIST</span>
+              <select id="booking-hairstylist" name="hairstylist" required disabled>
+                <option value="">PILIH HAIRSTYLIST</option>
+              </select>
+            </label>
+            <label class="booking-field booking-field-full">
+              <span>LAYANAN</span>
+              <select id="booking-service" name="service" required disabled>
+                <option value="">PILIH LAYANAN</option>
+              </select>
+            </label>
+            <label class="booking-field">
+              <span>TANGGAL</span>
+              <input id="booking-date" name="date" type="date" required>
+            </label>
+            <label class="booking-field">
+              <span>JAM</span>
+              <input id="booking-time" name="time" type="time" required>
+            </label>
+            <label class="booking-field booking-field-full">
+              <span>NAMA</span>
+              <input id="booking-name" name="name" type="text" autocomplete="name" maxlength="80" required>
+            </label>
+            <label class="booking-field booking-field-full">
+              <span>CATATAN <span class="booking-optional">OPSIONAL</span></span>
+              <textarea id="booking-note" name="note" rows="2" maxlength="500"></textarea>
+            </label>
+          </div>
+          <p class="booking-feedback" id="booking-feedback" role="status" hidden></p>
+          <button class="whatsapp-cta-link booking-submit" id="booking-submit" type="submit" disabled>
+            <span>KIRIM PERMINTAAN VIA WHATSAPP</span>
+            <span class="whatsapp-cta-arrow" aria-hidden="true">→</span>
+          </button>
+        </form>
+        <a class="whatsapp-cta-contact" href="https://wa.me/6285212034230?text=Halo%20TEAMCUT%2C%20saya%20ingin%20bertanya%20mengenai%20layanan%20TEAMCUT." target="_blank" rel="noopener noreferrer">PERTANYAAN UMUM? HUBUNGI ADMIN TEAMCUT <span aria-hidden="true">↗</span></a>
       </div>
     </section>
   </main>

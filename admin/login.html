@@ -7,7 +7,8 @@
   <meta name="description" content="Masuk ke panel operasional TEAMCUT.">
   <title>TEAMCUT. — MASUK ADMIN</title>
   <link rel="stylesheet" href="../css/admin.css">
-  <script src="../js/admin.js" defer></script>
+  <script type="module" src="../js/supabase.js"></script>
+  <script type="module" src="../js/admin.js"></script>
 </head>
 <body class="admin-page">
   <main class="admin-app">
@@ -43,15 +44,15 @@
         <form class="login-form" id="login-form" novalidate>
           <label class="form-field" for="admin-email">
             <span>EMAIL</span>
-            <input id="admin-email" name="email" type="email" autocomplete="off" placeholder="Email admin" required>
+            <input id="admin-email" name="email" type="email" autocomplete="username" placeholder="Email admin" required>
           </label>
           <label class="form-field" for="admin-password">
             <span>PASSWORD</span>
-            <input id="admin-password" name="password" type="password" autocomplete="off" placeholder="Password" required>
+            <input id="admin-password" name="password" type="password" autocomplete="current-password" placeholder="Password" required>
           </label>
           <p class="login-error" id="login-error" role="alert" hidden></p>
           <button class="login-submit" type="submit">MASUK <span aria-hidden="true">→</span></button>
-          <p class="demo-note">MODE DEMO · DATA TIDAK DISIMPAN KE DATABASE</p>
+          <p class="demo-note">AUTENTIKASI ADMIN SUPABASE</p>
         </form>
       </div>
     </section>
