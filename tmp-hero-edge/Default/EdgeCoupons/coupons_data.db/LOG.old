@@ -1,5 +1,0 @@
-2026/09/28-21:05:10.518 4dac Creating DB C:\DIONN\TEAMCUT\tmp-hero-edge\Default\EdgeCoupons/coupons_data.db since it was missing.
-2026/09/28-21:05:10.529 4dac Reusing MANIFEST C:\DIONN\TEAMCUT\tmp-hero-edge\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
-2026/09/28-21:06:03.052 40c4 Level-0 table #5: started
-2026/09/28-21:06:03.074 40c4 Level-0 table #5: 683273 bytes OK
-2026/09/28-21:06:03.087 40c4 Delete type=0 #3

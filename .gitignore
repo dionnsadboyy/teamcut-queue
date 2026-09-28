@@ -1,0 +1,12 @@
+# Temporary browser profiles and their cache, cookies, history, and login data
+/tmp-hero-edge/
+/tmp-hero-edge-dump/
+/tmp-browser-profile*/
+/.browser-profile*/
+/browser-profile*/
+/browser-cache/
+/bahan.zip
+
+# Browser automation output
+/playwright-report/
+/test-results/

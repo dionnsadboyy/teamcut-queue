@@ -9,6 +9,12 @@ import {
   setupBookingForm,
 } from "./booking.js";
 
+const BRANCH_PHOTO_FALLBACKS = {
+  cikedokan: "./assets/images/gallery/cikedokan/01-exterior-sign.jpeg",
+  jatiwangi: "./assets/images/gallery/jatiwangi/01-main-floor.jpeg",
+  jarakosta: "./assets/images/gallery/jarakosta/02-interior-wide.jpeg",
+};
+
 let branches = [];
 let hairstylists = [];
 let services = [];
@@ -150,6 +156,11 @@ function activateHeroBranch(branchId) {
   updateHero(branchId);
 }
 
+function getBranchPhotoFallback(branch) {
+  const branchKey = branch.nama.toLowerCase().replace(/[^a-z]/gu, "");
+  return BRANCH_PHOTO_FALLBACKS[branchKey] || "";
+}
+
 function renderHeroBranchTabs() {
   const tabs = document.querySelector("#hero-branch-tabs");
   if (!tabs) return;
@@ -215,20 +226,30 @@ function updateBranchSlide(branch) {
   }
 
   if (photo) {
+    const fallbackPhoto = getBranchPhotoFallback(branch);
+    const photoSources = [...new Set([branch.foto, fallbackPhoto].filter(Boolean))];
     photo.setAttribute(
       "aria-label",
-      branch.foto ? `Foto cabang ${branch.nama}` : `Foto cabang ${branch.nama} belum tersedia`,
+      photoSources.length ? `Foto cabang ${branch.nama}` : `Foto cabang ${branch.nama} belum tersedia`,
     );
     photo.replaceChildren();
-    if (branch.foto) {
+    if (photoSources.length) {
       const image = document.createElement("img");
-      image.src = branch.foto;
       image.alt = "";
+      let sourceIndex = 0;
+      const loadNextPhoto = () => {
+        if (sourceIndex >= photoSources.length) {
+          image.remove();
+          console.error(`Foto cabang TEAMCUT tidak dapat dimuat: ${photoSources.join(", ")}`);
+          return;
+        }
+        image.src = photoSources[sourceIndex++];
+      };
       image.addEventListener("error", () => {
-        console.error(`Foto cabang TEAMCUT tidak dapat dimuat: ${branch.foto}`);
-        image.remove();
-      }, { once: true });
+        loadNextPhoto();
+      });
       photo.append(image);
+      loadNextPhoto();
     } else {
       const fallback = document.createElement("span");
       fallback.textContent = "FOTO CABANG BELUM TERSEDIA";
@@ -382,6 +403,12 @@ function renderServices(services) {
       const description = document.createElement("p");
       description.textContent = service.deskripsi;
       copy.append(description);
+    }
+    if (service.nama.trim().toLowerCase() === "condrow") {
+      const note = document.createElement("p");
+      note.className = "service-note";
+      note.textContent = "Hanya tersedia dengan hairstylist Ilham.";
+      copy.append(note);
     }
 
     const price = document.createElement("div");

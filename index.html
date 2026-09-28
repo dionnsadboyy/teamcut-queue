@@ -190,24 +190,45 @@
         <p class="whatsapp-cta-copy">Isi detail pemesanan. Hairstylist akan mengecek ketersediaan dan mengonfirmasi jadwal secara manual melalui WhatsApp.</p>
         <form class="booking-form" id="booking-form">
           <div class="booking-fields">
-            <label class="booking-field">
-              <span>CABANG</span>
-              <select id="booking-branch" name="branch" required disabled>
-                <option value="">PILIH CABANG</option>
-              </select>
-            </label>
-            <label class="booking-field">
-              <span>HAIRSTYLIST</span>
-              <select id="booking-hairstylist" name="hairstylist" required disabled>
-                <option value="">PILIH HAIRSTYLIST</option>
-              </select>
-            </label>
-            <label class="booking-field booking-field-full">
-              <span>LAYANAN</span>
-              <select id="booking-service" name="service" required disabled>
-                <option value="">PILIH LAYANAN</option>
-              </select>
-            </label>
+            <div class="booking-field">
+              <span id="booking-branch-label">CABANG</span>
+              <div class="booking-select" data-booking-select>
+                <button class="booking-select-trigger" type="button" data-booking-select-trigger aria-labelledby="booking-branch-label booking-branch-value" aria-haspopup="listbox" aria-expanded="false" aria-controls="booking-branch-options" disabled>
+                  <span id="booking-branch-value" data-booking-select-value>PILIH CABANG</span>
+                  <span class="booking-select-chevron" aria-hidden="true"></span>
+                </button>
+                <div class="booking-select-menu" id="booking-branch-options" data-booking-select-menu role="listbox" aria-labelledby="booking-branch-label" hidden></div>
+                <select class="booking-native-select" id="booking-branch" name="branch" required disabled tabindex="-1" aria-hidden="true">
+                  <option value="">PILIH CABANG</option>
+                </select>
+              </div>
+            </div>
+            <div class="booking-field">
+              <span id="booking-hairstylist-label">HAIRSTYLIST</span>
+              <div class="booking-select" data-booking-select>
+                <button class="booking-select-trigger" type="button" data-booking-select-trigger aria-labelledby="booking-hairstylist-label booking-hairstylist-value" aria-haspopup="listbox" aria-expanded="false" aria-controls="booking-hairstylist-options" disabled>
+                  <span id="booking-hairstylist-value" data-booking-select-value>PILIH HAIRSTYLIST</span>
+                  <span class="booking-select-chevron" aria-hidden="true"></span>
+                </button>
+                <div class="booking-select-menu" id="booking-hairstylist-options" data-booking-select-menu role="listbox" aria-labelledby="booking-hairstylist-label" hidden></div>
+                <select class="booking-native-select" id="booking-hairstylist" name="hairstylist" required disabled tabindex="-1" aria-hidden="true">
+                  <option value="">PILIH HAIRSTYLIST</option>
+                </select>
+              </div>
+            </div>
+            <div class="booking-field booking-field-full">
+              <span id="booking-service-label">LAYANAN</span>
+              <div class="booking-select" data-booking-select>
+                <button class="booking-select-trigger" type="button" data-booking-select-trigger aria-labelledby="booking-service-label booking-service-value" aria-haspopup="listbox" aria-expanded="false" aria-controls="booking-service-options" disabled>
+                  <span id="booking-service-value" data-booking-select-value>PILIH LAYANAN</span>
+                  <span class="booking-select-chevron" aria-hidden="true"></span>
+                </button>
+                <div class="booking-select-menu" id="booking-service-options" data-booking-select-menu role="listbox" aria-labelledby="booking-service-label" hidden></div>
+                <select class="booking-native-select" id="booking-service" name="service" required disabled tabindex="-1" aria-hidden="true">
+                  <option value="">PILIH LAYANAN</option>
+                </select>
+              </div>
+            </div>
             <label class="booking-field">
               <span>TANGGAL</span>
               <input id="booking-date" name="date" type="date" required>
