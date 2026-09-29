@@ -1,5 +1,10 @@
 const TEAMCUT_ADMIN_WHATSAPP = "6285212034230";
 
+function formatBranchName(value) {
+  const name = String(value ?? "").trim();
+  return /^jati\s*wangi$/iu.test(name) ? "Jatiwangi" : name;
+}
+
 export function normalizeWhatsAppNumber(value) {
   const digits = String(value || "").replace(/\D/gu, "");
   if (!digits) return "";
@@ -20,6 +25,21 @@ export function isBookingDatePast(value, today = getLocalDateValue()) {
   return Boolean(value) && value < today;
 }
 
+export function isCondrowService(service) {
+  return String(service?.nama ?? "").trim().toLocaleLowerCase("id-ID") === "condrow";
+}
+
+export function formatServicePrice(service) {
+  if (service?.harga == null) return "";
+  const amount = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(service.harga);
+  if (!isCondrowService(service)) return amount;
+  return `mulai dari ${amount.replace(/^Rp\s*/u, "Rp")}`;
+}
+
 export function formatBookingDate(value) {
   const [year, month, day] = value.split("-").map(Number);
   return new Intl.DateTimeFormat("id-ID", {
@@ -37,7 +57,7 @@ export function buildBookingMessage({ branch, hairstylist, service, date, time, 
     "Mohon bantu cek ketersediaan jadwal berikut:",
     "",
     `Nama: ${name.trim()}`,
-    `Cabang: ${branch}`,
+    `Cabang: ${formatBranchName(branch)}`,
     `Hairstylist pilihan: ${hairstylist}`,
     `Layanan: ${service}`,
     `Tanggal yang diajukan: ${formatBookingDate(date)}`,
@@ -211,7 +231,7 @@ export function setupBookingForm({ branches = [], hairstylists = [], services = 
   function updateStylists() {
     const branchId = branchSelect.value;
     const selectedService = validServices.find((service) => service.id === serviceSelect.value);
-    const isCondrow = selectedService?.nama.toLowerCase() === "condrow";
+    const isCondrow = isCondrowService(selectedService);
     const branchProfiles = validHairstylists.filter((profile) =>
       profile.cabang_id === branchId && (!isCondrow || profile.nama.trim().toLowerCase() === "ilham"));
     const currentValue = stylistSelect.value;
@@ -233,7 +253,7 @@ export function setupBookingForm({ branches = [], hairstylists = [], services = 
     const requiredFieldsReady = Array.from(form.querySelectorAll("[required]"))
       .every((field) => (typeof field.value === "string" ? field.value.trim() : field.value) && field.validity.valid);
     const dateIsValid = dateInput.validity.valid && !isBookingDatePast(dateInput.value);
-    const condrowStylistAllowed = service?.nama.toLowerCase() !== "condrow"
+    const condrowStylistAllowed = !isCondrowService(service)
       || stylist?.nama.trim().toLowerCase() === "ilham";
     submit.disabled = !validBranches.length
       || !validHairstylists.length
@@ -249,16 +269,10 @@ export function setupBookingForm({ branches = [], hairstylists = [], services = 
   }
 
   updateMinimumDate();
-  setOptions(branchSelect, validBranches, "PILIH CABANG", (branch) => branch.nama);
+  setOptions(branchSelect, validBranches, "PILIH CABANG", (branch) => formatBranchName(branch.nama));
   branchDropdown.refresh();
   setOptions(serviceSelect, validServices, "PILIH LAYANAN", (service) => {
-    const price = service.harga == null
-      ? ""
-      : new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        maximumFractionDigits: 0,
-      }).format(service.harga);
+    const price = formatServicePrice(service);
     return `${service.nama.toUpperCase()}${price ? ` · ${price}` : ""}`;
   });
   serviceDropdown.refresh();
@@ -294,7 +308,7 @@ export function setupBookingForm({ branches = [], hairstylists = [], services = 
     const branch = validBranches.find((item) => item.id === branchSelect.value);
     const stylist = validHairstylists.find((item) => item.id === stylistSelect.value);
     const service = validServices.find((item) => item.id === serviceSelect.value);
-    if (service?.nama.toLowerCase() === "condrow" && stylist?.nama.trim().toLowerCase() !== "ilham") {
+    if (isCondrowService(service) && stylist?.nama.trim().toLowerCase() !== "ilham") {
       showFeedback("Condrow hanya dapat dipesan dengan hairstylist Ilham.", true);
       return;
     }

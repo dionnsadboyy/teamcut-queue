@@ -6,6 +6,11 @@ import {
 
 const ADMIN_ROLE = "admin";
 
+function formatBranchName(value) {
+  const name = String(value ?? "").trim();
+  return /^jati\s*wangi$/iu.test(name) ? "Jatiwangi" : name;
+}
+
 function isAdmin(user) {
   return user?.app_metadata?.role === ADMIN_ROLE;
 }
@@ -166,7 +171,7 @@ async function setupAdmin() {
       return;
     }
 
-    branchName.firstChild.textContent = branch.nama.toUpperCase();
+    branchName.firstChild.textContent = formatBranchName(branch.nama).toUpperCase();
     statusLabel.textContent = branch.status ? "BUKA" : "TUTUP";
     statusToggle.classList.toggle("is-open", branch.status);
     statusToggle.setAttribute("aria-pressed", String(branch.status));
@@ -199,7 +204,7 @@ async function setupAdmin() {
     branchSelect.replaceChildren(...branches.map((branch) => {
       const option = document.createElement("option");
       option.value = branch.id;
-      option.textContent = branch.nama;
+      option.textContent = formatBranchName(branch.nama);
       return option;
     }));
     if (branches.some((branch) => branch.id === selectedId)) branchSelect.value = selectedId;

@@ -4,6 +4,9 @@ import {
   supabase,
 } from "./supabase.js";
 import {
+  formatServicePrice,
+  isCondrowService,
+  normalizeWhatsAppNumber,
   setBookingFormUnavailable,
   setupBookingForm,
 } from "./booking.js";
@@ -26,41 +29,9 @@ function setCurrentYear() {
   if (year) year.textContent = String(new Date().getFullYear());
 }
 
-function setupSiteMenu() {
-  const header = document.querySelector(".site-header");
-  const toggle = header?.querySelector(".menu-toggle");
-  const menu = header?.querySelector("#site-nav");
-  if (!header || !toggle || !menu) return;
-
-  let closeTimer = 0;
-  function setMenuOpen(isOpen, returnFocus = false) {
-    window.clearTimeout(closeTimer);
-    toggle.setAttribute("aria-expanded", String(isOpen));
-    toggle.setAttribute("aria-label", isOpen ? "Tutup menu" : "Buka menu");
-    menu.setAttribute("aria-hidden", String(!isOpen));
-    menu.inert = !isOpen;
-    if (isOpen) {
-      menu.hidden = false;
-      window.requestAnimationFrame(() => menu.classList.add("is-open"));
-    } else {
-      menu.classList.remove("is-open");
-      closeTimer = window.setTimeout(() => { menu.hidden = true; }, 240);
-    }
-    if (returnFocus) toggle.focus();
-  }
-
-  toggle.addEventListener("click", () => {
-    setMenuOpen(toggle.getAttribute("aria-expanded") !== "true");
-  });
-  menu.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => setMenuOpen(false));
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && menu.classList.contains("is-open")) setMenuOpen(false, true);
-  });
-  document.addEventListener("click", (event) => {
-    if (menu.classList.contains("is-open") && !header.contains(event.target)) setMenuOpen(false);
-  });
+function formatBranchName(value) {
+  const name = String(value ?? "").trim();
+  return /^jati\s*wangi$/iu.test(name) ? "Jatiwangi" : name;
 }
 
 function setupMobileBottomNavigation() {
@@ -160,7 +131,7 @@ function updateHero(branchId = activeBranchId) {
   const count = document.querySelector("[data-hero-queue]");
   const mapLink = document.querySelector("[data-hero-map-link]");
 
-  if (strip) strip.setAttribute("aria-label", `Informasi cabang dan antrean ${branch.nama}`);
+  if (strip) strip.setAttribute("aria-label", `Informasi cabang dan antrean ${formatBranchName(branch.nama)}`);
   setStatus(status, branch.status);
   if (count) count.textContent = formatQueueCount(queue?.jumlah);
   if (mapLink) {
@@ -210,7 +181,7 @@ function renderHeroBranchTabs() {
     tab.dataset.branchId = branch.id;
     tab.setAttribute("role", "tab");
     tab.setAttribute("aria-controls", "hero-branch-panel");
-    tab.textContent = branch.nama.toUpperCase();
+    tab.textContent = formatBranchName(branch.nama).toUpperCase();
     tab.addEventListener("click", () => activateHeroBranch(branch.id));
     tab.addEventListener("keydown", (event) => {
       if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
@@ -242,9 +213,9 @@ function updateBranchSlide(branch) {
   const photo = slide.querySelector("[data-branch-photo]");
   const title = slide.querySelector("h3");
 
-  if (name) name.textContent = branch.nama.toUpperCase();
+  if (name) name.textContent = formatBranchName(branch.nama).toUpperCase();
   const gallery = slide.querySelector("[data-hairstylist-list]");
-  if (gallery) gallery.setAttribute("aria-label", `Hairstylist ${branch.nama}`);
+  if (gallery) gallery.setAttribute("aria-label", `Hairstylist ${formatBranchName(branch.nama)}`);
   if (title) {
     title.id = `branch-title-${branch.id}`;
     slide.setAttribute("aria-labelledby", title.id);
@@ -259,7 +230,7 @@ function updateBranchSlide(branch) {
       mapLink.removeAttribute("href");
       mapLink.hidden = true;
     }
-    mapLink.setAttribute("aria-label", `Lihat ${branch.nama} di Google Maps`);
+    mapLink.setAttribute("aria-label", `Lihat ${formatBranchName(branch.nama)} di Google Maps`);
   }
 
   if (photo) {
@@ -267,7 +238,7 @@ function updateBranchSlide(branch) {
     const photoSources = [...new Set([branch.foto, fallbackPhoto].filter(Boolean))];
     photo.setAttribute(
       "aria-label",
-      photoSources.length ? `Foto cabang ${branch.nama}` : `Foto cabang ${branch.nama} belum tersedia`,
+      photoSources.length ? `Foto cabang ${formatBranchName(branch.nama)}` : `Foto cabang ${formatBranchName(branch.nama)} belum tersedia`,
     );
     photo.replaceChildren();
     if (photoSources.length) {
@@ -315,8 +286,8 @@ function createBranchSlides() {
     slide.dataset.branchId = branch.id;
     const gallery = slide.querySelector("[data-hairstylist-list]");
     gallery.dataset.hairstylistList = branch.id;
-    gallery.setAttribute("aria-label", `Hairstylist ${branch.nama}`);
-    slide.querySelector("[data-branch-name]").textContent = branch.nama.toUpperCase();
+    gallery.setAttribute("aria-label", `Hairstylist ${formatBranchName(branch.nama)}`);
+    slide.querySelector("[data-branch-name]").textContent = formatBranchName(branch.nama).toUpperCase();
     slide.querySelector("[data-hairstylist-count]").textContent = "00";
     slide.querySelector("[data-queue]").textContent = "—";
     updateBranchSlide(branch);
@@ -335,7 +306,7 @@ function createBranchSlides() {
       marker.className = "branch-marker";
       marker.type = "button";
       marker.dataset.slideTo = String(index);
-      marker.setAttribute("aria-label", `Tampilkan cabang ${branch.nama}`);
+      marker.setAttribute("aria-label", `Tampilkan cabang ${formatBranchName(branch.nama)}`);
       return marker;
     }));
   }
@@ -441,7 +412,7 @@ function renderServices(services) {
       description.textContent = service.deskripsi;
       copy.append(description);
     }
-    if (service.nama.trim().toLowerCase() === "condrow") {
+    if (isCondrowService(service)) {
       const note = document.createElement("p");
       note.className = "service-note";
       note.textContent = "Hanya tersedia dengan hairstylist Ilham.";
@@ -454,14 +425,10 @@ function renderServices(services) {
     label.className = "service-price-label";
     label.textContent = "HARGA";
     const amount = document.createElement("strong");
-    amount.textContent = service.harga == null
-      ? "—"
-      : new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        maximumFractionDigits: 0,
-      }).format(service.harga);
-    if (service.harga == null) price.classList.add("is-unavailable");
+    const formattedPrice = formatServicePrice(service);
+    amount.textContent = formattedPrice || "—";
+    if (!formattedPrice) price.classList.add("is-unavailable");
+    if (isCondrowService(service) && formattedPrice) price.classList.add("is-starting-price");
     price.append(label, amount);
 
     const arrow = document.createElement("span");
@@ -571,6 +538,7 @@ function setupHairstylistDetails() {
   const bioField = dialog.querySelector("[data-detail-bio]");
   const strengthsField = dialog.querySelector("[data-detail-keunggulan]");
   const instagramField = dialog.querySelector("[data-detail-instagram]");
+  const whatsappField = dialog.querySelector("[data-detail-whatsapp]");
   const bookingLink = dialog.querySelector("[data-detail-booking]");
   let selectedProfileForBooking = null;
 
@@ -596,7 +564,7 @@ function setupHairstylistDetails() {
       const profile = hairstylists.find((item) => item.id === button.dataset.hairstylistId);
       if (!profile) return;
       const branch = branches.find((item) => item.id === profile.cabang_id);
-      const branchName = branch?.nama || "";
+      const branchName = formatBranchName(branch?.nama);
       nameField.textContent = profile.nama;
       branchField.textContent = branchName.toUpperCase();
       setProfilePhoto(photoField, profile);
@@ -616,6 +584,26 @@ function setupHairstylistDetails() {
         instagramField.removeAttribute("href");
         instagramField.removeAttribute("target");
         instagramField.removeAttribute("rel");
+      }
+      const whatsappNumber = normalizeWhatsAppNumber(profile.nomor_whatsapp);
+      if (whatsappField) {
+        if (whatsappNumber) {
+          const displayNumber = `+${whatsappNumber}`;
+          const consultationMessage = `Halo ${profile.nama}, saya ingin konsultasi mengenai layanan dan gaya rambut.`;
+          whatsappField.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(consultationMessage)}`;
+          whatsappField.textContent = `KONSULTASI VIA WHATSAPP · ${displayNumber}`;
+          whatsappField.setAttribute("aria-label", `Konsultasi via WhatsApp dengan ${profile.nama}, ${displayNumber}`);
+          whatsappField.target = "_blank";
+          whatsappField.rel = "noopener noreferrer";
+          whatsappField.hidden = false;
+        } else {
+          whatsappField.hidden = true;
+          whatsappField.textContent = "";
+          whatsappField.removeAttribute("href");
+          whatsappField.removeAttribute("aria-label");
+          whatsappField.removeAttribute("target");
+          whatsappField.removeAttribute("rel");
+        }
       }
       selectedProfileForBooking = profile;
       bookingLink.hidden = !branch;
@@ -702,7 +690,6 @@ async function loadSiteData() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   setCurrentYear();
-  setupSiteMenu();
   setupMobileBottomNavigation();
   setupSectionReveal();
   if (!isSupabaseConfigured) {

@@ -22,26 +22,26 @@ const galleryBranches = [
   },
   {
     id: "jatiwangi",
-    name: "JATI WANGI",
+    name: "JATIWANGI",
     photos: [
       {
         src: "./assets/images/gallery/jatiwangi/01-main-floor.jpeg",
-        alt: "Area utama TEAMCUT Jati Wangi dengan kursi layanan dan barber.",
-        caption: "Area utama cabang Jati Wangi.",
+        alt: "Area utama TEAMCUT Jatiwangi dengan kursi layanan dan barber.",
+        caption: "Area utama cabang Jatiwangi.",
       },
       {
         src: "./assets/images/gallery/jatiwangi/02-barber-and-shopfront.jpeg",
-        alt: "Barber melayani pelanggan di dalam TEAMCUT Jati Wangi.",
+        alt: "Barber melayani pelanggan di dalam TEAMCUT Jatiwangi.",
         caption: "Barber melayani pelanggan.",
       },
       {
         src: "./assets/images/gallery/jatiwangi/03-barber-at-work.jpeg",
-        alt: "Proses potong rambut di TEAMCUT Jati Wangi.",
+        alt: "Proses potong rambut di TEAMCUT Jatiwangi.",
         caption: "Proses potong rambut.",
       },
       {
         src: "./assets/images/gallery/jatiwangi/04-wash-area.jpeg",
-        alt: "Area cuci rambut di TEAMCUT Jati Wangi.",
+        alt: "Area cuci rambut di TEAMCUT Jatiwangi.",
         caption: "Area cuci rambut.",
       },
     ],
