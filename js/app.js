@@ -4,7 +4,6 @@ import {
   supabase,
 } from "./supabase.js";
 import {
-  createBookingWhatsAppUrl,
   setBookingFormUnavailable,
   setupBookingForm,
 } from "./booking.js";
@@ -62,6 +61,44 @@ function setupSiteMenu() {
   document.addEventListener("click", (event) => {
     if (menu.classList.contains("is-open") && !header.contains(event.target)) setMenuOpen(false);
   });
+}
+
+function setupMobileBottomNavigation() {
+  const navigation = document.querySelector("[data-mobile-bottom-nav]");
+  const links = Array.from(navigation?.querySelectorAll("[data-mobile-nav-link]") || []);
+  const sections = links
+    .map((link) => document.getElementById(link.hash.slice(1)))
+    .filter(Boolean);
+  if (!navigation || !links.length || !sections.length) return;
+
+  let updateScheduled = false;
+  function updateActiveLink() {
+    updateScheduled = false;
+    const activationLine = window.innerHeight * 0.42;
+    let activeSection = sections[0];
+    sections.forEach((section) => {
+      if (section.getBoundingClientRect().top <= activationLine) activeSection = section;
+    });
+    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) {
+      activeSection = sections[sections.length - 1];
+    }
+
+    links.forEach((link) => {
+      const isActive = link.hash === `#${activeSection.id}`;
+      link.classList.toggle("is-active", isActive);
+      if (isActive) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+  }
+
+  function scheduleActiveLinkUpdate() {
+    if (updateScheduled) return;
+    updateScheduled = true;
+    window.requestAnimationFrame(updateActiveLink);
+  }
+
+  window.addEventListener("scroll", scheduleActiveLinkUpdate, { passive: true });
+  window.addEventListener("resize", scheduleActiveLinkUpdate);
 }
 
 function setupSectionReveal() {
@@ -535,6 +572,24 @@ function setupHairstylistDetails() {
   const strengthsField = dialog.querySelector("[data-detail-keunggulan]");
   const instagramField = dialog.querySelector("[data-detail-instagram]");
   const bookingLink = dialog.querySelector("[data-detail-booking]");
+  let selectedProfileForBooking = null;
+
+  bookingLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    const profile = selectedProfileForBooking;
+    const branchSelect = document.querySelector("#booking-branch");
+    const stylistSelect = document.querySelector("#booking-hairstylist");
+    if (!profile || !branchSelect || !stylistSelect) return;
+
+    branchSelect.value = profile.cabang_id;
+    branchSelect.dispatchEvent(new Event("change", { bubbles: true }));
+    if (Array.from(stylistSelect.options).some((option) => option.value === profile.id)) {
+      stylistSelect.value = profile.id;
+      stylistSelect.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    dialog.close();
+    document.querySelector("#cta-whatsapp")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 
   document.querySelectorAll("[data-hairstylist-id]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -562,11 +617,9 @@ function setupHairstylistDetails() {
         instagramField.removeAttribute("target");
         instagramField.removeAttribute("rel");
       }
-      const message = `Halo TEAMCUT, saya ingin bertanya tentang pemesanan dengan hairstylist ${profile.nama} di cabang ${branchName}.`;
-      const bookingUrl = createBookingWhatsAppUrl(profile.nomor_whatsapp, message);
-      bookingLink.hidden = !bookingUrl;
-      if (bookingUrl) bookingLink.href = bookingUrl;
-      else bookingLink.removeAttribute("href");
+      selectedProfileForBooking = profile;
+      bookingLink.hidden = !branch;
+      bookingLink.href = "#cta-whatsapp";
       dialog.showModal();
     });
   });
@@ -650,6 +703,7 @@ async function loadSiteData() {
 document.addEventListener("DOMContentLoaded", async () => {
   setCurrentYear();
   setupSiteMenu();
+  setupMobileBottomNavigation();
   setupSectionReveal();
   if (!isSupabaseConfigured) {
     reportSiteError(getSupabaseConfigError());

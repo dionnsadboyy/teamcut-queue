@@ -170,6 +170,9 @@ a {
 .site-nav a:focus-visible {
   color: #c4c4c4;
 }
+.mobile-bottom-nav {
+  display: none;
+}
 .section {
   padding: 4rem 1.5rem;
 }
@@ -655,6 +658,80 @@ button:not(:disabled):active,
   .site-nav a:hover,
   .site-nav a:focus-visible {
     color: var(--color-accent);
+  }
+  body {
+    padding-bottom: calc(6.25rem + env(safe-area-inset-bottom));
+  }
+  .hero {
+    padding-bottom: calc(9rem + env(safe-area-inset-bottom));
+  }
+  .mobile-bottom-nav {
+    position: fixed;
+    z-index: 9;
+    right: max(0.75rem, env(safe-area-inset-right));
+    bottom: calc(0.55rem + env(safe-area-inset-bottom));
+    left: max(0.75rem, env(safe-area-inset-left));
+    display: grid;
+    min-height: 4.75rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 0.3rem 0.35rem;
+    border: 1px solid rgb(255 255 255 / 30%);
+    border-radius: 999px;
+    background: rgb(16 16 16 / 84%);
+    box-shadow: 0 5px 18px rgb(0 0 0 / 22%);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    color: #a5a5a5;
+  }
+  .mobile-bottom-nav-item {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 4rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.3rem 0.12rem;
+    color: #a5a5a5;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.035em;
+    line-height: 1;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: color 0.18s ease;
+  }
+  .mobile-bottom-nav-item + .mobile-bottom-nav-item::before {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 1px;
+    height: 2.1rem;
+    background: rgb(255 255 255 / 18%);
+    content: "";
+    transform: translateY(-50%);
+  }
+  .mobile-bottom-nav-item svg {
+    display: block;
+    width: 1.65rem;
+    height: 1.65rem;
+    flex: 0 0 auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.65;
+  }
+  .mobile-bottom-nav-item.is-active,
+  .mobile-bottom-nav-item[aria-current="location"] {
+    color: var(--color-accent);
+  }
+  .mobile-bottom-nav-item:focus-visible {
+    border-radius: 999px;
+    outline: 1px solid var(--color-white);
+    outline-offset: -0.15rem;
   }
 }
 

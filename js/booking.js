@@ -1,3 +1,5 @@
+const TEAMCUT_ADMIN_WHATSAPP = "6285212034230";
+
 export function normalizeWhatsAppNumber(value) {
   const digits = String(value || "").replace(/\D/gu, "");
   if (!digits) return "";
@@ -29,16 +31,20 @@ export function formatBookingDate(value) {
 }
 
 export function buildBookingMessage({ branch, hairstylist, service, date, time, name, note }) {
+  const cleanNote = note.trim();
   return [
-    "Halo TEAMCUT, saya ingin membuat pemesanan.",
+    "Halo Admin TEAMCUT, saya ingin mengajukan booking.",
+    "Mohon bantu cek ketersediaan jadwal berikut:",
     "",
-    `Cabang: ${branch}`,
-    `Hairstylist: ${hairstylist}`,
-    `Layanan: ${service}`,
-    `Tanggal: ${formatBookingDate(date)}`,
-    `Jam: ${time.replace(":", ".")}`,
     `Nama: ${name.trim()}`,
-    `Catatan: ${note.trim() || "-"}`,
+    `Cabang: ${branch}`,
+    `Hairstylist pilihan: ${hairstylist}`,
+    `Layanan: ${service}`,
+    `Tanggal yang diajukan: ${formatBookingDate(date)}`,
+    `Jam yang diajukan: ${time}`,
+    ...(cleanNote ? [`Catatan: ${cleanNote}`] : []),
+    "",
+    "Saya menunggu konfirmasi admin setelah jadwal dicek bersama hairstylist.",
   ].join("\n");
 }
 
@@ -176,9 +182,18 @@ export function setupBookingForm({ branches = [], hairstylists = [], services = 
   const stylistSelect = form.querySelector("#booking-hairstylist");
   const serviceSelect = form.querySelector("#booking-service");
   const dateInput = form.querySelector("#booking-date");
+  const timeInput = form.querySelector("#booking-time");
+  const nameInput = form.querySelector("#booking-name");
+  const noteInput = form.querySelector("#booking-note");
   const feedback = form.querySelector("#booking-feedback");
   const submit = form.querySelector("#booking-submit");
-  if (!branchSelect || !stylistSelect || !serviceSelect || !dateInput || !feedback || !submit) return;
+  if (!branchSelect || !stylistSelect || !serviceSelect || !dateInput || !timeInput || !nameInput || !noteInput || !feedback || !submit) return;
+  const adminPhone = TEAMCUT_ADMIN_WHATSAPP;
+  const validBranches = branches.filter((record) => record?.id && typeof record.nama === "string" && record.nama.trim());
+  const validHairstylists = hairstylists.filter((record) =>
+    record?.id && record.cabang_id && typeof record.nama === "string" && record.nama.trim());
+  const validServices = services.filter((record) =>
+    record?.id && typeof record.nama === "string" && record.nama.trim());
   const branchDropdown = createCustomSelect(branchSelect);
   const stylistDropdown = createCustomSelect(stylistSelect);
   const serviceDropdown = createCustomSelect(serviceSelect);
@@ -195,9 +210,9 @@ export function setupBookingForm({ branches = [], hairstylists = [], services = 
 
   function updateStylists() {
     const branchId = branchSelect.value;
-    const selectedService = services.find((service) => service.id === serviceSelect.value);
-    const isCondrow = selectedService?.nama.trim().toLowerCase() === "condrow";
-    const branchProfiles = hairstylists.filter((profile) =>
+    const selectedService = validServices.find((service) => service.id === serviceSelect.value);
+    const isCondrow = selectedService?.nama.toLowerCase() === "condrow";
+    const branchProfiles = validHairstylists.filter((profile) =>
       profile.cabang_id === branchId && (!isCondrow || profile.nama.trim().toLowerCase() === "ilham"));
     const currentValue = stylistSelect.value;
     setOptions(stylistSelect, branchProfiles, "PILIH HAIRSTYLIST", (profile) => profile.nama);
@@ -212,29 +227,31 @@ export function setupBookingForm({ branches = [], hairstylists = [], services = 
   }
 
   function updateSubmitState() {
-    const branch = branches.find((item) => item.id === branchSelect.value);
-    const stylist = hairstylists.find((item) => item.id === stylistSelect.value);
-    const service = services.find((item) => item.id === serviceSelect.value);
+    const branch = validBranches.find((item) => item.id === branchSelect.value);
+    const stylist = validHairstylists.find((item) => item.id === stylistSelect.value);
+    const service = validServices.find((item) => item.id === serviceSelect.value);
     const requiredFieldsReady = Array.from(form.querySelectorAll("[required]"))
-      .every((field) => field.value.trim() && field.validity.valid);
-    const condrowStylistAllowed = service?.nama.trim().toLowerCase() !== "condrow"
+      .every((field) => (typeof field.value === "string" ? field.value.trim() : field.value) && field.validity.valid);
+    const dateIsValid = dateInput.validity.valid && !isBookingDatePast(dateInput.value);
+    const condrowStylistAllowed = service?.nama.toLowerCase() !== "condrow"
       || stylist?.nama.trim().toLowerCase() === "ilham";
-    submit.disabled = !branches.length
-      || !hairstylists.length
-      || !services.length
+    submit.disabled = !validBranches.length
+      || !validHairstylists.length
+      || !validServices.length
       || !requiredFieldsReady
+      || !dateIsValid
       || !branch
       || !stylist
       || stylist.cabang_id !== branch.id
-      || !stylist.nomor_whatsapp
       || !service
+      || !normalizeWhatsAppNumber(adminPhone)
       || !condrowStylistAllowed;
   }
 
   updateMinimumDate();
-  setOptions(branchSelect, branches, "PILIH CABANG", (branch) => branch.nama);
+  setOptions(branchSelect, validBranches, "PILIH CABANG", (branch) => branch.nama);
   branchDropdown.refresh();
-  setOptions(serviceSelect, services, "PILIH LAYANAN", (service) => {
+  setOptions(serviceSelect, validServices, "PILIH LAYANAN", (service) => {
     const price = service.harga == null
       ? ""
       : new Intl.NumberFormat("id-ID", {
@@ -242,7 +259,7 @@ export function setupBookingForm({ branches = [], hairstylists = [], services = 
         currency: "IDR",
         maximumFractionDigits: 0,
       }).format(service.harga);
-    return `${service.nama.toUpperCase()}${price ? ` — ${price}` : ""}`;
+    return `${service.nama.toUpperCase()}${price ? ` · ${price}` : ""}`;
   });
   serviceDropdown.refresh();
   setOptions(stylistSelect, [], "PILIH HAIRSTYLIST", (profile) => profile.nama);
@@ -256,6 +273,11 @@ export function setupBookingForm({ branches = [], hairstylists = [], services = 
     updateMinimumDate();
     dateInput.setCustomValidity(isBookingDatePast(dateInput.value) ? "Pilih tanggal hari ini atau setelahnya." : "");
   });
+  dateInput.addEventListener("change", updateSubmitState);
+  nameInput.addEventListener("input", () => {
+    nameInput.setCustomValidity("");
+    updateSubmitState();
+  });
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -263,16 +285,25 @@ export function setupBookingForm({ branches = [], hairstylists = [], services = 
     dateInput.setCustomValidity(isBookingDatePast(dateInput.value) ? "Pilih tanggal hari ini atau setelahnya." : "");
     if (!form.reportValidity()) return;
 
-    const branch = branches.find((item) => item.id === branchSelect.value);
-    const stylist = hairstylists.find((item) => item.id === stylistSelect.value);
-    const service = services.find((item) => item.id === serviceSelect.value);
-    const phone = stylist?.nomor_whatsapp;
-    if (service?.nama.trim().toLowerCase() === "condrow" && stylist?.nama.trim().toLowerCase() !== "ilham") {
+    if (!nameInput.value.trim()) {
+      nameInput.setCustomValidity("Masukkan nama Anda.");
+      form.reportValidity();
+      return;
+    }
+    nameInput.setCustomValidity("");
+    const branch = validBranches.find((item) => item.id === branchSelect.value);
+    const stylist = validHairstylists.find((item) => item.id === stylistSelect.value);
+    const service = validServices.find((item) => item.id === serviceSelect.value);
+    if (service?.nama.toLowerCase() === "condrow" && stylist?.nama.trim().toLowerCase() !== "ilham") {
       showFeedback("Condrow hanya dapat dipesan dengan hairstylist Ilham.", true);
       return;
     }
-    if (!branch || !stylist || stylist.cabang_id !== branch.id || !service || !phone) {
-      showFeedback("Data hairstylist atau nomor WhatsApp belum tersedia. Silakan pilih ulang atau hubungi admin.", true);
+    if (!branch || !stylist || stylist.cabang_id !== branch.id || !service) {
+      showFeedback("Pilihan cabang, hairstylist, atau layanan belum tersedia. Silakan pilih ulang.", true);
+      return;
+    }
+    if (!normalizeWhatsAppNumber(adminPhone)) {
+      showFeedback("Nomor WhatsApp admin TEAMCUT belum tersedia.", true);
       return;
     }
 
@@ -281,17 +312,17 @@ export function setupBookingForm({ branches = [], hairstylists = [], services = 
       hairstylist: stylist.nama,
       service: service.nama,
       date: dateInput.value,
-      time: form.querySelector("#booking-time").value,
-      name: form.querySelector("#booking-name").value,
-      note: form.querySelector("#booking-note").value,
+      time: timeInput.value,
+      name: nameInput.value,
+      note: noteInput.value,
     });
-    const url = createBookingWhatsAppUrl(phone, message);
+    const url = createBookingWhatsAppUrl(adminPhone, message);
     if (!url) {
-      showFeedback("Nomor WhatsApp hairstylist belum valid. Silakan hubungi admin TEAMCUT.", true);
+      showFeedback("Nomor WhatsApp admin TEAMCUT belum valid.", true);
       return;
     }
 
-    showFeedback("Permintaan pemesanan dibuka di WhatsApp hairstylist pilihan Anda.");
+    showFeedback("WhatsApp admin TEAMCUT dibuka dengan draft pengajuan. Jadwal menunggu konfirmasi setelah dicek bersama hairstylist.");
     window.open(url, "_blank", "noopener,noreferrer");
   });
 }
