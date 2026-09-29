@@ -1,0 +1,24 @@
+<div id="backdrop" class="modal-backdrop" aria-hidden="true">
+    <section class="stock-modal material-flip-scene" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="material-flip-card">
+        <div class="material-front">
+          <div class="material-front-content">
+      <button id="close-modal" class="modal-close" aria-label="Tutup">×</button>
+      <header class="stock-heading"><div class="modal-part"><i></i><b id="m-part">A:0130</b><span id="m-type">K62</span></div><h2 id="modal-title">Armature 0130</h2><p><mark id="m-local">CKD</mark> <span id="m-konmi">(Konmi CKD / Ekspor)</span></p><img src="../assets/armature.png" alt="Armature"></header>
+      <section class="stock-current"><div><small>Current Stock</small><strong id="m-qty">8 <span>BOX</span></strong><b id="m-status" class="status ready">READY</b></div><div><small>Last Update</small><b id="m-update">07 Sep 2026 · 09:42</b><em>by BOP (Gedung 1)</em></div></section>
+      <button id="request-preview" class="request-preview" type="button"><header><h3>Request Material dari Gedung 2</h3><span aria-hidden="true">›</span></header><div><small>Jumlah diminta</small><strong id="request-quantity">12 <span>BOX</span></strong></div><div><small>Status request</small><b id="request-status" class="waiting">PENDING</b></div></button>
+
+      <form id="quantity-form" class="quantity-form" hidden>
+        <label id="quantity-label" for="quantity-input">Quantity (BOX)</label>
+        <input id="quantity-input" name="quantity" type="number" step="1" min="0" required inputmode="numeric">
+        <p id="quantity-help"></p>
+        <div class="stock-actions"><button id="quantity-cancel" type="button">Batal</button><button id="quantity-submit" class="primary" type="submit">Simpan</button></div>
+      </form>
+      <p id="action-feedback" class="action-feedback" role="status"></p>
+            <footer id="modal-primary-actions" class="stock-actions"><button id="update-stock">▣ &nbsp; Update Stock</button><button id="handle-request" class="primary">▣ &nbsp; Handle Request</button></footer>
+          </div>
+        </div>
+        <div class="material-back" aria-hidden="true"><img src="../assets/logo.png" alt=""><span>ARMATURE MONITORING</span></div>
+      </div>
+    </section>
+  </div>

@@ -532,6 +532,7 @@ function setProfilePhoto(container, profile) {
 function setupHairstylistDetails() {
   const dialog = document.querySelector("#hairstylist-dialog");
   if (!dialog) return;
+  const profileCard = dialog.querySelector(".hairstylist-profile-card");
   const nameField = dialog.querySelector("[data-detail-name]");
   const branchField = dialog.querySelector("[data-detail-branch]");
   const photoField = dialog.querySelector("[data-detail-photo]");
@@ -541,6 +542,87 @@ function setupHairstylistDetails() {
   const whatsappField = dialog.querySelector("[data-detail-whatsapp]");
   const bookingLink = dialog.querySelector("[data-detail-booking]");
   let selectedProfileForBooking = null;
+  let profileMotion = null;
+  let isClosing = false;
+
+  const profileFlipFrames = [
+    {
+      offset: 0,
+      transform: "perspective(1500px) translate3d(0, 16px, -100px) rotateX(-5deg) rotateY(180deg) scale(0.78)",
+      easing: "cubic-bezier(0.55, 0, 0.8, 0.35)",
+    },
+    {
+      offset: 0.25,
+      transform: "perspective(1500px) translate3d(0, 8px, -42px) rotateX(-4deg) rotateY(118deg) scale(0.87)",
+      easing: "cubic-bezier(0.65, 0, 0.6, 0.4)",
+    },
+    {
+      offset: 0.48,
+      transform: "perspective(1500px) translate3d(0, 0, 12px) rotateX(-2.5deg) rotateY(58deg) scale(0.94)",
+      easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+    },
+    {
+      offset: 0.78,
+      transform: "perspective(1500px) translate3d(0, 1px, 4px) rotateX(-0.8deg) rotateY(16deg) scale(0.99)",
+      easing: "cubic-bezier(0.18, 0.75, 0.25, 1)",
+    },
+    {
+      offset: 0.92,
+      transform: "perspective(1500px) translate3d(0, -1px, 2px) rotateX(0deg) rotateY(4deg) scale(1.004)",
+      easing: "cubic-bezier(0.2, 0.7, 0.25, 1)",
+    },
+    {
+      offset: 1,
+      transform: "perspective(1500px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) scale(1)",
+    },
+  ];
+
+  function prefersReducedMotion() {
+    return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true;
+  }
+
+  function openProfileDialog() {
+    profileMotion?.cancel();
+    profileMotion = null;
+    isClosing = false;
+    dialog.showModal();
+
+    if (!profileCard?.animate || prefersReducedMotion()) return;
+    profileMotion = profileCard.animate(profileFlipFrames, {
+      duration: 520,
+      fill: "both",
+    });
+  }
+
+  function closeProfileDialog(afterClose) {
+    if (!dialog.open) {
+      afterClose?.();
+      return;
+    }
+    if (isClosing) return;
+
+    if (!profileMotion || prefersReducedMotion()) {
+      profileMotion?.cancel();
+      profileMotion = null;
+      dialog.close();
+      afterClose?.();
+      return;
+    }
+
+    isClosing = true;
+    const closingMotion = profileMotion;
+    closingMotion.reverse();
+    closingMotion.finished
+      .then(() => {
+        if (profileMotion !== closingMotion || !isClosing || !dialog.open) return;
+        profileMotion.cancel();
+        profileMotion = null;
+        isClosing = false;
+        dialog.close();
+        afterClose?.();
+      })
+      .catch(() => {});
+  }
 
   bookingLink.addEventListener("click", (event) => {
     event.preventDefault();
@@ -555,8 +637,9 @@ function setupHairstylistDetails() {
       stylistSelect.value = profile.id;
       stylistSelect.dispatchEvent(new Event("change", { bubbles: true }));
     }
-    dialog.close();
-    document.querySelector("#cta-whatsapp")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    closeProfileDialog(() => {
+      document.querySelector("#cta-whatsapp")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   });
 
   document.querySelectorAll("[data-hairstylist-id]").forEach((button) => {
@@ -608,13 +691,22 @@ function setupHairstylistDetails() {
       selectedProfileForBooking = profile;
       bookingLink.hidden = !branch;
       bookingLink.href = "#cta-whatsapp";
-      dialog.showModal();
+      openProfileDialog();
     });
   });
 
-  dialog.querySelector("[data-hairstylist-close]")?.addEventListener("click", () => dialog.close());
+  dialog.querySelector("[data-hairstylist-close]")?.addEventListener("click", () => closeProfileDialog());
   dialog.addEventListener("click", (event) => {
-    if (event.target === dialog) dialog.close();
+    if (event.target === dialog) closeProfileDialog();
+  });
+  dialog.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeProfileDialog();
+  });
+  dialog.addEventListener("close", () => {
+    profileMotion?.cancel();
+    profileMotion = null;
+    isClosing = false;
   });
 }
 

@@ -1612,6 +1612,9 @@ button:not(:disabled):active,
   letter-spacing: 0.14em;
   text-decoration: none;
 }
+.hairstylist-booking[hidden] {
+  display: none;
+}
 .hairstylist-booking span {
   color: var(--color-accent);
   font-size: 1rem;
@@ -2433,5 +2436,261 @@ button:not(:disabled):active,
   .gallery-photo {
     width: 100%;
     height: 100%;
+  }
+}
+
+/* Compact 3D profile card. These rules are scoped to the hairstylist dialog. */
+.hairstylist-dialog {
+  position: fixed;
+  inset: 0;
+  box-sizing: border-box;
+  width: min(27rem, calc(100vw - 1.5rem));
+  max-width: 27rem;
+  height: auto;
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  color: var(--color-white);
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+}
+.hairstylist-dialog[open] {
+  display: grid;
+  place-items: center;
+}
+.hairstylist-dialog::backdrop {
+  background: rgb(0 0 0 / 78%);
+}
+.hairstylist-profile-scene {
+  width: 100%;
+  max-height: calc(100dvh - 2rem);
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+}
+.hairstylist-profile-card {
+  display: grid;
+  width: 100%;
+  max-height: inherit;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.hairstylist-profile-front,
+.hairstylist-profile-back {
+  box-sizing: border-box;
+  grid-area: 1 / 1;
+  width: 100%;
+  border: 1px solid #383838;
+  border-radius: 0.35rem;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.hairstylist-profile-front {
+  position: relative;
+  overflow: hidden;
+  background: #090909;
+  box-shadow: 0 24px 60px rgb(0 0 0 / 42%);
+  transform: rotateY(0deg) translateZ(1px);
+}
+.hairstylist-profile-back {
+  display: grid;
+  min-height: 20rem;
+  align-content: center;
+  justify-items: center;
+  gap: 0.5rem;
+  background: #101010;
+  color: #f5f5f5;
+  transform: rotateY(180deg) translateZ(1px);
+}
+.hairstylist-profile-back > span {
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(2.4rem, 12vw, 3.5rem);
+  letter-spacing: -0.055em;
+}
+.hairstylist-profile-back > span > span {
+  color: var(--color-accent);
+}
+.hairstylist-profile-back small {
+  color: #a5a5a5;
+  font-size: 0.55rem;
+  letter-spacing: 0.26em;
+}
+.hairstylist-detail {
+  box-sizing: border-box;
+  max-height: calc(100dvh - 2rem);
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: #090909;
+  scrollbar-color: #555 transparent;
+  scrollbar-width: thin;
+}
+.hairstylist-detail-topline {
+  position: sticky;
+  z-index: 5;
+  top: 0;
+  display: flex;
+  min-height: 2.8rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.45rem 1rem;
+  background: #090909;
+}
+.hairstylist-detail-topline .eyebrow {
+  margin: 0;
+  color: var(--color-white);
+  font-size: 0.53rem;
+  letter-spacing: 0.18em;
+}
+.hairstylist-close {
+  position: static;
+  flex: 0 0 auto;
+  min-height: 2rem;
+  padding: 0.2rem 0 0.2rem 0.4rem;
+  font-size: 0.55rem;
+}
+.hairstylist-detail-body {
+  display: block;
+}
+.hairstylist-detail-intro {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.78fr) minmax(0, 1.22fr);
+  align-items: end;
+  gap: 0.85rem;
+  padding: 0 1rem;
+}
+.hairstylist-detail-photo {
+  width: 100%;
+  height: clamp(8.5rem, 38vw, 10.25rem);
+  min-height: 0;
+  aspect-ratio: auto;
+  border-radius: 0.15rem;
+}
+.hairstylist-detail-photo span {
+  padding: 0.5rem;
+  font-size: 0.53rem;
+  text-align: center;
+}
+.hairstylist-detail-intro-copy {
+  min-width: 0;
+  padding: 0 0 0.1rem;
+}
+.hairstylist-detail-intro .eyebrow {
+  margin: 0 0 0.4rem;
+  color: #9b9b9b;
+  font-size: 0.53rem;
+  letter-spacing: 0.19em;
+}
+.hairstylist-detail-intro h2 {
+  margin: 0;
+  font-size: clamp(2rem, 8vw, 2.8rem);
+  line-height: 0.88;
+  letter-spacing: -0.045em;
+  overflow-wrap: anywhere;
+}
+.hairstylist-detail-copy {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 0.85rem 1rem;
+  padding: 1rem 1rem 0.85rem;
+}
+.hairstylist-detail-section {
+  min-width: 0;
+  padding: 0;
+}
+.hairstylist-detail-section + .hairstylist-detail-section {
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+.hairstylist-detail-section:nth-of-type(3),
+.hairstylist-booking {
+  grid-column: 1 / -1;
+}
+.hairstylist-detail-section h3 {
+  margin: 0 0 0.35rem;
+  color: #909090;
+  font-size: 0.52rem;
+  letter-spacing: 0.17em;
+}
+.hairstylist-detail-section p {
+  margin: 0;
+  color: #d0d0d0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.hairstylist-detail-instagram,
+.hairstylist-detail-whatsapp {
+  display: inline-block;
+  max-width: 100%;
+  color: var(--color-white);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  text-decoration-color: rgb(255 255 255 / 40%);
+  text-underline-offset: 0.2em;
+}
+.hairstylist-detail-whatsapp[hidden] {
+  display: none;
+}
+.hairstylist-booking {
+  display: flex;
+  min-height: 2.8rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.1rem;
+  padding: 0.65rem 0;
+  border-top: 1px solid #555;
+  color: var(--color-white);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-decoration: none;
+}
+.hairstylist-booking span {
+  flex: 0 0 auto;
+  color: var(--color-accent);
+  font-size: 1rem;
+}
+
+@media (min-width: 760px) {
+  .hairstylist-dialog {
+    width: min(31rem, calc(100vw - 4rem));
+    max-width: 31rem;
+    max-height: calc(90dvh - 1rem);
+  }
+  .hairstylist-profile-scene,
+  .hairstylist-detail {
+    max-height: calc(90dvh - 1rem);
+  }
+  .hairstylist-detail-topline {
+    padding-inline: 1.25rem;
+  }
+  .hairstylist-detail-intro {
+    grid-template-columns: minmax(9rem, 0.78fr) minmax(0, 1.22fr);
+    gap: 1rem;
+    padding-inline: 1.25rem;
+  }
+  .hairstylist-detail-photo {
+    height: 12rem;
+  }
+  .hairstylist-detail-intro h2 {
+    font-size: clamp(2.8rem, 5vw, 3.5rem);
+  }
+  .hairstylist-detail-copy {
+    padding: 1.1rem 1.25rem 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hairstylist-profile-card {
+    transform: none !important;
   }
 }
