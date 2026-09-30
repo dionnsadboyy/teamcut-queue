@@ -2547,13 +2547,13 @@ button:not(:disabled):active,
   flex: 0 0 auto;
   min-height: 2.75rem;
   padding: 0.25rem 0 0.25rem 0.65rem;
-  color: var(--color-white);
-  font-size: clamp(1.125rem, 4.8vw, 1.25rem);
-  font-weight: 900;
-  letter-spacing: 0.1em;
+  color: #d6d6d6;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
 }
 .hairstylist-close span {
-  font-size: clamp(1rem, 4.4vw, 1.25rem);
+  font-size: 0.85rem;
 }
 .hairstylist-profile-card :focus-visible {
   outline-color: var(--color-white);
