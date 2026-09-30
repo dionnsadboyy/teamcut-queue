@@ -541,6 +541,36 @@ function setupHairstylistDetails() {
   const instagramField = dialog.querySelector("[data-detail-instagram]");
   const whatsappField = dialog.querySelector("[data-detail-whatsapp]");
   const bookingLink = dialog.querySelector("[data-detail-booking]");
+  const publicProfileCopy = {
+    aldo: {
+      bio: "Tiap orang punya style sendiri. Gue bantu cari potongan yang paling pas buat lo.",
+      strengths: "Clean • Classic • Modern",
+    },
+    amir: {
+      bio: "Biar rapi dan nyaman, potongannya harus cocok sama bentuk wajah lo. Kita tentukan bareng.",
+      strengths: "Bentuk wajah • Rapi • Detail",
+    },
+    babel: {
+      bio: "Mau tampilan yang lebih fresh? Gue bantu cari potongan yang pas buat style lo.",
+      strengths: "Detail • Nyaman • Pas",
+    },
+    ilham: {
+      bio: "Gue bantu pilih haircut yang cocok sama style dan kebutuhan lo.",
+      strengths: "Bentuk wajah • Konsultasi • Detail",
+    },
+    iyong: {
+      bio: "Potongan fresh dan gampang ditata buat sehari-hari.",
+      strengths: "Teliti • Fresh • Rapi",
+    },
+    kiki: {
+      bio: "Gue fokus bikin potongan rapi yang nyaman dan cocok sama style lo.",
+      strengths: "Nyaman • Rapi • Gampang diatur",
+    },
+    qinoy: {
+      bio: "Detail kecil bikin hasil beda. Gue bantu cari potongan clean yang gampang lo atur.",
+      strengths: "Detail • Clean • Gampang diatur",
+    },
+  };
   let selectedProfileForBooking = null;
   let profileTimeline = null;
   let pendingAfterClose = null;
@@ -713,8 +743,10 @@ function setupHairstylistDetails() {
         .split(/\r?\n/u)
         .map((line) => line.replace(/[\p{Extended_Pictographic}\p{Emoji_Modifier}\uFE0F\u200D]/gu, "").trim())
         .filter(Boolean);
-      bioField.textContent = bioLines[0] || "Bio belum tersedia.";
-      strengthsField.textContent = profile.keunggulan || "Belum tersedia.";
+      const profileName = profile.nama.trim().toLocaleLowerCase("id-ID");
+      const publicCopy = publicProfileCopy[profileName];
+      bioField.textContent = publicCopy?.bio || bioLines[0] || "Bio belum tersedia.";
+      strengthsField.textContent = publicCopy?.strengths || profile.keunggulan || "Belum tersedia.";
       const instagramUsername = (profile.instagram || "").trim().replace(/^@/u, "");
       instagramField.textContent = instagramUsername ? `@${instagramUsername}` : "Belum tersedia.";
       if (instagramUsername) {
@@ -729,11 +761,10 @@ function setupHairstylistDetails() {
       const whatsappNumber = normalizeWhatsAppNumber(profile.nomor_whatsapp);
       if (whatsappField) {
         if (whatsappNumber) {
-          const displayNumber = `+${whatsappNumber}`;
-          const consultationMessage = `Halo ${profile.nama}, saya ingin konsultasi mengenai layanan dan gaya rambut.`;
+          const consultationMessage = `Halo ${profile.nama}, saya mau tanya soal potongan rambut.`;
           whatsappField.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(consultationMessage)}`;
-          whatsappField.textContent = `KONSULTASI VIA WHATSAPP · ${displayNumber}`;
-          whatsappField.setAttribute("aria-label", `Konsultasi via WhatsApp dengan ${profile.nama}, ${displayNumber}`);
+          whatsappField.textContent = "KONSULTASI VIA WHATSAPP";
+          whatsappField.setAttribute("aria-label", `Konsultasi via WhatsApp dengan ${profile.nama}`);
           whatsappField.target = "_blank";
           whatsappField.rel = "noopener noreferrer";
           whatsappField.hidden = false;

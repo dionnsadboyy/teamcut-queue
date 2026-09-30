@@ -53,8 +53,8 @@ export function formatBookingDate(value) {
 export function buildBookingMessage({ branch, hairstylist, service, date, time, name, note }) {
   const cleanNote = note.trim();
   return [
-    "Halo Admin TEAMCUT, saya ingin mengajukan booking.",
-    "Mohon bantu cek ketersediaan jadwal berikut:",
+    "Halo Admin TEAMCUT, saya mau ajukan booking.",
+    "Boleh cek jadwal ini?",
     "",
     `Nama: ${name.trim()}`,
     `Cabang: ${formatBranchName(branch)}`,
@@ -64,7 +64,7 @@ export function buildBookingMessage({ branch, hairstylist, service, date, time, 
     `Jam yang diajukan: ${time}`,
     ...(cleanNote ? [`Catatan: ${cleanNote}`] : []),
     "",
-    "Saya menunggu konfirmasi admin setelah jadwal dicek bersama hairstylist.",
+    "Saya tunggu konfirmasinya setelah jadwal dicek.",
   ].join("\n");
 }
 
@@ -313,7 +313,7 @@ export function setupBookingForm({ branches = [], hairstylists = [], services = 
       return;
     }
     if (!branch || !stylist || stylist.cabang_id !== branch.id || !service) {
-      showFeedback("Pilihan cabang, hairstylist, atau layanan belum tersedia. Silakan pilih ulang.", true);
+      showFeedback("Pilihan cabang, hairstylist, atau layanan belum tersedia. Coba pilih ulang.", true);
       return;
     }
     if (!normalizeWhatsAppNumber(adminPhone)) {
@@ -336,7 +336,7 @@ export function setupBookingForm({ branches = [], hairstylists = [], services = 
       return;
     }
 
-    showFeedback("WhatsApp admin TEAMCUT dibuka dengan draft pengajuan. Jadwal menunggu konfirmasi setelah dicek bersama hairstylist.");
+    showFeedback("Draft booking dibuka di WhatsApp admin TEAMCUT. Jadwal dicek dulu sebelum dikonfirmasi.");
     window.open(url, "_blank", "noopener,noreferrer");
   });
 }
