@@ -12,9 +12,9 @@ import {
 } from "./booking.js";
 
 const BRANCH_PHOTO_FALLBACKS = {
-  cikedokan: "./assets/images/gallery/cikedokan/01-exterior-sign.jpeg",
-  jatiwangi: "./assets/images/gallery/jatiwangi/01-main-floor.jpeg",
-  jarakosta: "./assets/images/gallery/jarakosta/02-interior-wide.jpeg",
+  cikedokan: "./assets/images/gallery/cikedokan/01-exterior-sign.webp",
+  jatiwangi: "./assets/images/gallery/jatiwangi/01-main-floor.webp",
+  jarakosta: "./assets/images/gallery/jarakosta/02-interior-wide.webp",
 };
 
 let branches = [];
@@ -542,56 +542,123 @@ function setupHairstylistDetails() {
   const whatsappField = dialog.querySelector("[data-detail-whatsapp]");
   const bookingLink = dialog.querySelector("[data-detail-booking]");
   let selectedProfileForBooking = null;
-  let profileMotion = null;
+  let profileTimeline = null;
+  let pendingAfterClose = null;
   let isClosing = false;
-
-  const profileFlipFrames = [
-    {
-      offset: 0,
-      transform: "perspective(1500px) translate3d(0, 16px, -100px) rotateX(-5deg) rotateY(180deg) scale(0.78)",
-      easing: "cubic-bezier(0.55, 0, 0.8, 0.35)",
-    },
-    {
-      offset: 0.25,
-      transform: "perspective(1500px) translate3d(0, 8px, -42px) rotateX(-4deg) rotateY(118deg) scale(0.87)",
-      easing: "cubic-bezier(0.65, 0, 0.6, 0.4)",
-    },
-    {
-      offset: 0.48,
-      transform: "perspective(1500px) translate3d(0, 0, 12px) rotateX(-2.5deg) rotateY(58deg) scale(0.94)",
-      easing: "cubic-bezier(0.4, 0, 0.2, 1)",
-    },
-    {
-      offset: 0.78,
-      transform: "perspective(1500px) translate3d(0, 1px, 4px) rotateX(-0.8deg) rotateY(16deg) scale(0.99)",
-      easing: "cubic-bezier(0.18, 0.75, 0.25, 1)",
-    },
-    {
-      offset: 0.92,
-      transform: "perspective(1500px) translate3d(0, -1px, 2px) rotateX(0deg) rotateY(4deg) scale(1.004)",
-      easing: "cubic-bezier(0.2, 0.7, 0.25, 1)",
-    },
-    {
-      offset: 1,
-      transform: "perspective(1500px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) scale(1)",
-    },
-  ];
 
   function prefersReducedMotion() {
     return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true;
   }
 
+  function resetProfileTransform() {
+    if (!profileCard) return;
+    const gsap = window.gsap;
+    if (gsap) {
+      gsap.killTweensOf(profileCard);
+      gsap.set(profileCard, { clearProps: "transform,transformOrigin,opacity,visibility" });
+    } else {
+      profileCard.style.removeProperty("transform");
+    }
+  }
+
   function openProfileDialog() {
-    profileMotion?.cancel();
-    profileMotion = null;
+    const gsap = window.gsap;
+    profileTimeline?.kill();
+    profileTimeline = null;
+    pendingAfterClose = null;
+    if (gsap && profileCard) {
+      gsap.killTweensOf(profileCard);
+      gsap.set(profileCard, { clearProps: "transform,transformOrigin,opacity,visibility" });
+    }
     isClosing = false;
     dialog.showModal();
 
-    if (!profileCard?.animate || prefersReducedMotion()) return;
-    profileMotion = profileCard.animate(profileFlipFrames, {
-      duration: 520,
-      fill: "both",
+    if (!gsap || !profileCard || prefersReducedMotion()) return;
+
+    let timeline;
+    timeline = gsap.timeline({
+      paused: true,
+      defaults: { overwrite: "auto", force3D: true },
+      onReverseComplete: () => {
+        if (profileTimeline !== timeline) return;
+        const afterClose = pendingAfterClose;
+        profileTimeline = null;
+        pendingAfterClose = null;
+        isClosing = false;
+        resetProfileTransform();
+        dialog.close();
+        afterClose?.();
+      },
     });
+    timeline
+      .set(profileCard, {
+        rotationY: 180,
+        rotationX: -5,
+        rotationZ: -3.5,
+        scale: 0.78,
+        x: -7,
+        y: 17,
+        z: -108,
+        transformPerspective: 1500,
+        transformOrigin: "50% 50%",
+      }, 0)
+      .to(profileCard, {
+        rotationY: 120,
+        rotationX: 3.8,
+        rotationZ: 2.6,
+        scale: 0.87,
+        x: 6,
+        y: 8,
+        z: -42,
+        duration: 0.16,
+        ease: "power3.in",
+      }, 0)
+      .to(profileCard, {
+        rotationY: 62,
+        rotationX: -3.4,
+        rotationZ: -2.2,
+        scale: 0.94,
+        x: -2,
+        y: 0,
+        z: 18,
+        duration: 0.16,
+        ease: "power2.inOut",
+      })
+      .to(profileCard, {
+        rotationY: 16,
+        rotationX: 1.8,
+        rotationZ: 1.2,
+        scale: 0.99,
+        x: 1,
+        y: 1,
+        z: 7,
+        duration: 0.22,
+        ease: "power3.out",
+      })
+      .to(profileCard, {
+        rotationY: 4,
+        rotationX: -0.35,
+        rotationZ: -0.25,
+        scale: 1.004,
+        x: 0,
+        y: -1,
+        z: 2,
+        duration: 0.14,
+        ease: "power3.out",
+      })
+      .to(profileCard, {
+        rotationY: 0,
+        rotationX: 0,
+        rotationZ: 0,
+        scale: 1,
+        x: 0,
+        y: 0,
+        z: 0,
+        duration: 0.12,
+        ease: "power3.out",
+      });
+    profileTimeline = timeline;
+    timeline.play(0);
   }
 
   function closeProfileDialog(afterClose) {
@@ -601,27 +668,18 @@ function setupHairstylistDetails() {
     }
     if (isClosing) return;
 
-    if (!profileMotion || prefersReducedMotion()) {
-      profileMotion?.cancel();
-      profileMotion = null;
+    if (!profileTimeline || !window.gsap || prefersReducedMotion()) {
+      profileTimeline?.kill();
+      profileTimeline = null;
+      resetProfileTransform();
       dialog.close();
       afterClose?.();
       return;
     }
 
     isClosing = true;
-    const closingMotion = profileMotion;
-    closingMotion.reverse();
-    closingMotion.finished
-      .then(() => {
-        if (profileMotion !== closingMotion || !isClosing || !dialog.open) return;
-        profileMotion.cancel();
-        profileMotion = null;
-        isClosing = false;
-        dialog.close();
-        afterClose?.();
-      })
-      .catch(() => {});
+    pendingAfterClose = afterClose || null;
+    profileTimeline.reverse();
   }
 
   bookingLink.addEventListener("click", (event) => {
@@ -704,9 +762,11 @@ function setupHairstylistDetails() {
     closeProfileDialog();
   });
   dialog.addEventListener("close", () => {
-    profileMotion?.cancel();
-    profileMotion = null;
+    profileTimeline?.kill();
+    profileTimeline = null;
+    pendingAfterClose = null;
     isClosing = false;
+    resetProfileTransform();
   });
 }
 

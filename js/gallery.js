@@ -4,17 +4,17 @@ const galleryBranches = [
     name: "CIKEDOKAN",
     photos: [
       {
-        src: "./assets/images/gallery/cikedokan/01-exterior-sign.jpeg",
+        src: "./assets/images/gallery/cikedokan/01-exterior-sign.webp",
         alt: "Tampak depan TEAMCUT Cikedokan dengan papan nama di atas pintu masuk.",
         caption: "Tampak depan cabang Cikedokan.",
       },
       {
-        src: "./assets/images/gallery/cikedokan/02-exterior.jpeg",
+        src: "./assets/images/gallery/cikedokan/02-exterior.webp",
         alt: "Bagian luar TEAMCUT Cikedokan dan pintu masuk barbershop.",
         caption: "Bagian luar dan pintu masuk cabang Cikedokan.",
       },
       {
-        src: "./assets/images/gallery/cikedokan/03-barber-at-work.jpeg",
+        src: "./assets/images/gallery/cikedokan/03-barber-at-work.webp",
         alt: "Barber sedang melayani pelanggan di TEAMCUT Cikedokan.",
         caption: "Barber melayani pelanggan.",
       },
@@ -25,22 +25,22 @@ const galleryBranches = [
     name: "JATIWANGI",
     photos: [
       {
-        src: "./assets/images/gallery/jatiwangi/01-main-floor.jpeg",
+        src: "./assets/images/gallery/jatiwangi/01-main-floor.webp",
         alt: "Area utama TEAMCUT Jatiwangi dengan kursi layanan dan barber.",
         caption: "Area utama cabang Jatiwangi.",
       },
       {
-        src: "./assets/images/gallery/jatiwangi/02-barber-and-shopfront.jpeg",
+        src: "./assets/images/gallery/jatiwangi/02-barber-and-shopfront.webp",
         alt: "Barber melayani pelanggan di dalam TEAMCUT Jatiwangi.",
         caption: "Barber melayani pelanggan.",
       },
       {
-        src: "./assets/images/gallery/jatiwangi/03-barber-at-work.jpeg",
+        src: "./assets/images/gallery/jatiwangi/03-barber-at-work.webp",
         alt: "Proses potong rambut di TEAMCUT Jatiwangi.",
         caption: "Proses potong rambut.",
       },
       {
-        src: "./assets/images/gallery/jatiwangi/04-wash-area.jpeg",
+        src: "./assets/images/gallery/jatiwangi/04-wash-area.webp",
         alt: "Area cuci rambut di TEAMCUT Jatiwangi.",
         caption: "Area cuci rambut.",
       },
@@ -51,17 +51,17 @@ const galleryBranches = [
     name: "JARAKOSTA",
     photos: [
       {
-        src: "./assets/images/gallery/jarakosta/01-exterior.jpeg",
+        src: "./assets/images/gallery/jarakosta/01-exterior.webp",
         alt: "Tampak depan TEAMCUT Jarakosta.",
         caption: "Tampak depan cabang Jarakosta.",
       },
       {
-        src: "./assets/images/gallery/jarakosta/02-interior-wide.jpeg",
+        src: "./assets/images/gallery/jarakosta/02-interior-wide.webp",
         alt: "Area interior TEAMCUT Jarakosta dengan kursi dan cermin barber.",
         caption: "Area interior cabang Jarakosta.",
       },
       {
-        src: "./assets/images/gallery/jarakosta/03-barber-at-work.jpeg",
+        src: "./assets/images/gallery/jarakosta/03-barber-at-work.webp",
         alt: "Barber sedang melayani pelanggan di TEAMCUT Jarakosta.",
         caption: "Barber melayani pelanggan.",
       },
